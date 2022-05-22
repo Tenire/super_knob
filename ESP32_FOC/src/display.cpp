@@ -9,7 +9,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-22 21:20:28
+ * @LastEditTime: 2022-05-23 00:44:17
  */
 
 TimerHandle_t poweron_tmr;
@@ -19,12 +19,12 @@ static const uint16_t screenWidth = 240;
 static const uint16_t screenHeight = 240;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[screenWidth * 10];
-lv_group_t *group;              //默认组
+lv_group_t *defult_group;              //默认组
 lv_indev_t *indev_encoder;      //编码器输入
 LV_IMG_DECLARE(motor_img);      //图片初始化
 LV_IMG_DECLARE(instrument_img); //图片初始化
 LV_IMG_DECLARE(chip_img);       //图片初始化
-LV_IMG_DECLARE(air_cond_img);       //图片初始化
+LV_IMG_DECLARE(lamp_img);       //图片初始化
 
 lv_obj_t* power_on_bar;
 
@@ -146,21 +146,6 @@ static void anim_timeline_create(void)
     lv_anim_timeline_add(anim_timeline, 400, &a5);
     lv_anim_timeline_add(anim_timeline, 400, &a6);
 }
-
-static void slider_prg_event_handler(lv_event_t *e)
-{
-    lv_obj_t *slider = lv_event_get_target(e);
-
-    if (!anim_timeline)
-    {
-        anim_timeline_create();
-    }
-
-    int32_t progress = lv_slider_get_value(slider);
-    //取出进度条的值，设置时间线进度
-    lv_anim_timeline_set_progress(anim_timeline, progress);
-}
-
 /**
  * Create an animation timeline
  */
@@ -284,15 +269,15 @@ void lv_example_scroll_a(void)
     for (i = 0; i < 20; i++)
     {
         lv_obj_t *normal_obj = lv_btn_create(cont);
-        lv_obj_set_width(normal_obj, lv_pct(100));
-        lv_obj_set_height(normal_obj, 100);
+        lv_obj_set_width(normal_obj, lv_pct(100));//百分比
+        lv_obj_set_height(normal_obj, lv_pct(20));
 
         lv_obj_t *img1 = lv_img_create(normal_obj);
-        lv_img_set_src(img1, &air_cond_img);
+        lv_img_set_src(img1, &lamp_img);
         lv_obj_align(img1, LV_ALIGN_LEFT_MID, 0, 0);
 
         lv_obj_t* line1 = lv_line_create(normal_obj);
-        static lv_point_t line_points[] = { {70, 5}, {70, 70}}; 
+        static lv_point_t line_points[] = { {50, 2}, {50, 15}}; 
         lv_line_set_points(line1, line_points, 2);
 
     }
@@ -397,9 +382,9 @@ void Task_lvgl(void *pvParameters)
     indev_drv.read_cb = encoder_read;
     indev_encoder = lv_indev_drv_register(&indev_drv);
     //想要和按键交互必须创建一个对象组： 并且必须使用以下命令将对象添加到其中
-    group = lv_group_create();
-    lv_group_set_default(group);
-    lv_indev_set_group(indev_encoder, group);
+    defult_group = lv_group_create();
+    lv_group_set_default(defult_group);
+    lv_indev_set_group(indev_encoder, defult_group);
 
     lv_poweron_anim_timeline();
 

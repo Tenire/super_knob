@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-22 17:42:34
+ * @LastEditTime: 2022-05-23 00:00:59
  */
 #include <motor.h>
 #include <main.h>
@@ -130,7 +130,6 @@ void Task_foc(void *pvParameters)
     //校准编码器、启用FOC
     motor.initFOC();
     
-    
     send_message = &MOTOR_MSG;
     send_message->ucMessageID = 1;
     xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
@@ -234,7 +233,7 @@ void Task_foc(void *pvParameters)
     }
 
     //Serial.println(config.position);
-    vTaskDelay(2);
+    vTaskDelay(1);
         
     }
 }
