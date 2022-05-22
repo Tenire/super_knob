@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "lv_demo_music.h": "c",
+        "arduino.h": "c"
+    }
+}
