@@ -9,7 +9,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-23 00:44:17
+ * @LastEditTime: 2022-05-24 01:19:16
  */
 
 TimerHandle_t poweron_tmr;
@@ -24,7 +24,11 @@ lv_indev_t *indev_encoder;      //编码器输入
 LV_IMG_DECLARE(motor_img);      //图片初始化
 LV_IMG_DECLARE(instrument_img); //图片初始化
 LV_IMG_DECLARE(chip_img);       //图片初始化
+
 LV_IMG_DECLARE(lamp_img);       //图片初始化
+LV_IMG_DECLARE(leds_img);       //图片初始化
+LV_IMG_DECLARE(socket_img);       //图片初始化
+LV_IMG_DECLARE(computer_img);       //图片初始化
 
 lv_obj_t* power_on_bar;
 
@@ -248,6 +252,47 @@ static void scroll_event_cb(lv_event_t *e)
     }
 }
 
+void lv_set_scroll_box(lv_obj_t* cont, void* image_src, const char * text_buff)
+{
+    /* style */
+    static lv_style_t style_btn;
+    lv_style_init(&style_btn);
+    lv_style_set_bg_opa(&style_btn, 0);
+    //lv_style_set_bg_color(&style_bg, lv_palette_main(LV_PALETTE_GREY));
+    lv_style_set_radius(&style_btn, 10);
+
+    static lv_style_t style_text;
+    lv_style_init(&style_text);
+    lv_style_set_text_opa(&style_text, 255);
+    lv_style_set_text_color(&style_text, lv_color_black());
+
+    lv_obj_t* normal_obj = lv_btn_create(cont);
+    lv_obj_set_width(normal_obj, lv_pct(100));
+    lv_obj_set_height(normal_obj, lv_pct(40));
+    lv_obj_add_style(normal_obj, &style_btn, LV_PART_MAIN);
+
+    lv_obj_t* line1 = lv_line_create(normal_obj);
+    static lv_point_t line_points[] = { {70, 5}, {70, 70} };
+    lv_line_set_points(line1, line_points, 2);
+
+    lv_obj_t *img1 = lv_img_create(normal_obj);
+    lv_img_set_src(img1, image_src);
+    lv_obj_align(img1, LV_ALIGN_LEFT_MID, 0, 0);
+
+    lv_obj_t* line2 = lv_line_create(normal_obj);
+    static lv_point_t line_points_2[] = { {80, 40}, {180, 40} };
+    lv_line_set_points(line2, line_points_2, 2);
+
+    lv_obj_t* label = lv_label_create(normal_obj);
+    lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);     /*Circular scroll*/
+    lv_obj_set_width(label, 150);
+    lv_label_set_text(label, text_buff);
+    lv_obj_add_style(label, &style_text, 0);
+
+    lv_obj_align(label, LV_ALIGN_RIGHT_MID, 50, -5);
+}
+
+
 /**
  * Translate the object as they scroll
  */
@@ -255,7 +300,6 @@ void lv_example_scroll_a(void)
 {
     lv_obj_t *cont = lv_obj_create(lv_scr_act());
     lv_obj_set_size(cont, 240, 240);
-
     lv_obj_center(cont);
     lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
     lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_SCROLL, NULL); //每次位置变化时触发
@@ -264,23 +308,12 @@ void lv_example_scroll_a(void)
     lv_obj_set_scroll_dir(cont, LV_DIR_VER); //滚动方向为上下滚动
     lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER); //将子对象与滚动对象的中心对齐
     lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF); //从不显示滚动条
+    const char* test = "123123";
 
-    uint32_t i;
-    for (i = 0; i < 20; i++)
-    {
-        lv_obj_t *normal_obj = lv_btn_create(cont);
-        lv_obj_set_width(normal_obj, lv_pct(100));//百分比
-        lv_obj_set_height(normal_obj, lv_pct(20));
-
-        lv_obj_t *img1 = lv_img_create(normal_obj);
-        lv_img_set_src(img1, &lamp_img);
-        lv_obj_align(img1, LV_ALIGN_LEFT_MID, 0, 0);
-
-        lv_obj_t* line1 = lv_line_create(normal_obj);
-        static lv_point_t line_points[] = { {50, 2}, {50, 15}}; 
-        lv_line_set_points(line1, line_points, 2);
-
-    }
+    lv_set_scroll_box(cont, (void *)&lamp_img, test);
+    lv_set_scroll_box(cont, (void *)&leds_img, test);
+    lv_set_scroll_box(cont, (void *)&socket_img, test);
+    lv_set_scroll_box(cont, (void *)&computer_img, test);
 
     /*Update the buttons position manually for first*/
     lv_event_send(cont, LV_EVENT_SCROLL, NULL);
@@ -307,7 +340,12 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
         data->enc_diff--;
         old_num = config.position;
     }
-    data->state = LV_INDEV_STATE_REL;
+
+    if(touchRead(32) < 20){
+        data->state = LV_INDEV_STATE_PR;
+    }else{
+        data->state = LV_INDEV_STATE_REL;
+    }
 }
 
 void poweron_timeout(TimerHandle_t pxTimer)

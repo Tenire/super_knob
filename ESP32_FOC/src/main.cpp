@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-22 23:31:34
+ * @LastEditTime: 2022-05-24 00:31:30
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -33,7 +33,7 @@ void setup()
     motor_msg_Queue = xQueueCreate(10, sizeof(struct motor_message *));
 
     xTaskCreatePinnedToCore(
-        Task_foc, "Task_foc", 4096, NULL, 0, &Task_foc_Handle, ESP32_RUNNING_CORE);
+        Task_foc, "Task_foc", 4096, NULL, 2, &Task_foc_Handle, ESP32_RUNNING_CORE);
     xTaskCreatePinnedToCore(
         Task_lvgl, "Task_lvgl", 4096, NULL, 3, &Task_lvgl_Handle, LVGL_RUNNING_CORE);
 }
