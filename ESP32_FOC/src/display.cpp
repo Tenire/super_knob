@@ -9,7 +9,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-24 01:19:16
+ * @LastEditTime: 2022-05-24 23:11:48
  */
 
 TimerHandle_t poweron_tmr;
@@ -286,6 +286,8 @@ void lv_set_scroll_box(lv_obj_t* cont, void* image_src, const char * text_buff)
     lv_obj_t* label = lv_label_create(normal_obj);
     lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);     /*Circular scroll*/
     lv_obj_set_width(label, 150);
+    LV_FONT_DECLARE(lv_font_chinese_source_20); //加载中文字体
+    lv_obj_set_style_text_font(label, &lv_font_chinese_source_20, 0);
     lv_label_set_text(label, text_buff);
     lv_obj_add_style(label, &style_text, 0);
 
@@ -308,12 +310,11 @@ void lv_example_scroll_a(void)
     lv_obj_set_scroll_dir(cont, LV_DIR_VER); //滚动方向为上下滚动
     lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER); //将子对象与滚动对象的中心对齐
     lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF); //从不显示滚动条
-    const char* test = "123123";
 
-    lv_set_scroll_box(cont, (void *)&lamp_img, test);
-    lv_set_scroll_box(cont, (void *)&leds_img, test);
-    lv_set_scroll_box(cont, (void *)&socket_img, test);
-    lv_set_scroll_box(cont, (void *)&computer_img, test);
+    lv_set_scroll_box(cont, (void *)&lamp_img, "台灯");
+    lv_set_scroll_box(cont, (void *)&leds_img, "灯带");
+    lv_set_scroll_box(cont, (void *)&socket_img, "插座");
+    lv_set_scroll_box(cont, (void *)&computer_img, "电脑");
 
     /*Update the buttons position manually for first*/
     lv_event_send(cont, LV_EVENT_SCROLL, NULL);
@@ -340,6 +341,7 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
         data->enc_diff--;
         old_num = config.position;
     }
+    //Serial.println(touchRead(32));
 
     if(touchRead(32) < 20){
         data->state = LV_INDEV_STATE_PR;
@@ -428,7 +430,7 @@ void Task_lvgl(void *pvParameters)
 
     static uint32_t user_data = 10;
     lv_timer_t *_welcom_timer = lv_timer_create(welcome_timer, 500, &user_data);
-    lv_timer_set_repeat_count(_welcom_timer, 1);
+    lv_timer_set_repeat_count(_welcom_timer, 2);
 
     //创建开机页面超时定时器
     poweron_tmr = xTimerCreate("poweron_Timer", (400), pdTRUE, (void *)0, poweron_timeout);
@@ -437,7 +439,7 @@ void Task_lvgl(void *pvParameters)
     for (;;)
     {
         struct _motor_message *motor_message;
-        if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)10))
+        if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)1))
         {
             Serial.println("------------------------------------>>>>>>");
             Serial.println(motor_message->ucMessageID);

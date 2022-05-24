@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-23 00:00:59
+ * @LastEditTime: 2022-05-24 23:21:06
  */
 #include <motor.h>
 #include <main.h>
@@ -85,8 +85,21 @@ float CLAMP(const float value, const float low, const float high)
     return value < low ? low : (value > high ? high : value); 
 }
 
-
-
+void motor_shake(int strength, int delay_time)
+{
+    motor.move(strength);
+    for (int i = 0; i < delay_time; i++)
+    {
+        motor.loopFOC();
+        delay(1);
+    }
+    motor.move(-strength);
+    for (int i = 0; i < delay_time; i++)
+    {
+        motor.loopFOC();
+        delay(1);
+    }
+}
 
 void Task_foc(void *pvParameters)
 {
@@ -140,21 +153,8 @@ void Task_foc(void *pvParameters)
     //定义电机ID
     command.add('M', onMotor, (char *)"motor");
 
-    // 设置目标电压
-    float target_voltage = 2;
-    float strength = 5;
-    motor.move(strength);
-    for (int i = 0; i < 3; i++)
-    {
-        motor.loopFOC();
-        delay(1);
-    }
-    motor.move(-strength);
-    for (int i = 0; i < 3; i++)
-    {
-        motor.loopFOC();
-        delay(1);
-    }
+    motor_shake(5, 3);
+
     motor.move(0);
     motor.loopFOC();
 
