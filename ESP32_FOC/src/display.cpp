@@ -9,16 +9,16 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-24 23:11:48
+ * @LastEditTime: 2022-05-25 22:17:50
  */
 
 TimerHandle_t poweron_tmr;
-
-/*Change to your screen resolution*/
 static const uint16_t screenWidth = 240;
 static const uint16_t screenHeight = 240;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[screenWidth * 10];
+static lv_color_t buf_1[screenWidth * 30];
+static lv_color_t buf_2[screenWidth * 30];
+
 lv_group_t *defult_group;              //默认组
 lv_indev_t *indev_encoder;      //编码器输入
 LV_IMG_DECLARE(motor_img);      //图片初始化
@@ -40,9 +40,11 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
     uint32_t w = (area->x2 - area->x1 + 1);
     uint32_t h = (area->y2 - area->y1 + 1);
 
+    //开启DMA传输
     tft.startWrite();
-    tft.setAddrWindow(area->x1, area->y1, w, h);
-    tft.pushColors((uint16_t *)&color_p->full, w * h, true);
+    tft.setSwapBytes(true);
+    tft.pushImageDMA(area->x1, area->y1, w, h,(uint16_t *)&color_p->full);
+    tft.dmaWait();
     tft.endWrite();
 
     lv_disp_flush_ready(disp);
@@ -383,7 +385,7 @@ void welcome_timer(lv_timer_t *timer)
 
     /*Do something with LVGL*/
     //是否反转动画时间线
-    // lv_anim_timeline_set_reverse(anim_timeline, true);
+    //lv_anim_timeline_set_reverse(anim_timeline, true);
     //启动时间线
     lv_anim_timeline_start(anim_timeline);
 
@@ -402,9 +404,12 @@ void Task_lvgl(void *pvParameters)
 
     /*初始化显示*/
     lv_init();
+
+
     tft.begin();        /* TFT init */
+    tft.initDMA();
     tft.setRotation(0); /* Landscape orientation, flipped */
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * 10);
+    lv_disp_draw_buf_init(&draw_buf, buf_1, buf_2, screenWidth * 30); //开启双缓冲
     /*Initialize the display*/
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
@@ -430,7 +435,7 @@ void Task_lvgl(void *pvParameters)
 
     static uint32_t user_data = 10;
     lv_timer_t *_welcom_timer = lv_timer_create(welcome_timer, 500, &user_data);
-    lv_timer_set_repeat_count(_welcom_timer, 2);
+    lv_timer_set_repeat_count(_welcom_timer, 1);
 
     //创建开机页面超时定时器
     poweron_tmr = xTimerCreate("poweron_Timer", (400), pdTRUE, (void *)0, poweron_timeout);

@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-24 00:31:30
+ * @LastEditTime: 2022-05-25 21:56:23
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -40,7 +40,7 @@ void setup()
 
 void loop()
 {
-    vTaskDelay(1000);
+    //vTaskDelay(1000);
 }
 
 

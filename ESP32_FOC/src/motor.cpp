@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-24 23:21:06
+ * @LastEditTime: 2022-05-25 22:14:04
  */
 #include <motor.h>
 #include <main.h>
@@ -33,14 +33,10 @@ KnobConfig config = {
     .num_positions = 32,
     .position = 0,
     .position_width_radians = 8.225806452 * _PI / 180,
-    .detent_strength_unit = 2,
+    .detent_strength_unit = 2.3,
     .endstop_strength_unit = 1,
     .snap_point = 1,
 };
-
-
-
-
 
 //设置位置传感器（编码器、磁传感器、霍尔传感器）
 // MagneticSensorI2C sensor = MagneticSensorI2C(0x36, 12, 0x0E, 4);
@@ -74,9 +70,9 @@ void Blink(int n)
     for (int i = 0; i < n; i++)
     {
         digitalWrite(LED_PIN, HIGH);
-        _delay(200);
+        vTaskDelay(200);
         digitalWrite(LED_PIN, LOW);
-        _delay(100);
+        vTaskDelay(100);
     }
 }
 
