@@ -3,9 +3,9 @@
 #### 介绍
 基于ESP32与无刷电机实现的超级旋钮
 
-![my_plan_pic](figures/my_plan_pic.jpg)
+![my_plan_pic](Docs/images/my_plan_pic.jpg)
 
-![ui_1](figures/ui_3.png)
+![ui_1](Docs/images/ui_3.png)
 
 #### 软件架构
 
