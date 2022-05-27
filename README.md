@@ -1,42 +1,27 @@
 # Super knob
 
-#### 介绍
-基于ESP32与无刷电机实现的超级旋钮
+## 介绍
+Super knob 是基于ESP32与无刷电机实现的超级旋钮，该项目基于国外开源项目：[smartknob](https://github.com/scottbez1/smartknob)
+
+我将无刷电机的旋钮部分解耦出来，通过磁吸的方式搭配不同的底座，来实现各种应用场景，同时设计了一套协议用于旋钮与底座的交互，可实现针对不同场景带来不同的触感体验，甚至可以在同一个场景的不同操作下模拟不同的触感和阻尼反馈。类似于智能手机中线性马达对于不同应用或页面的机械触感模拟。
+
+同时磁吸的灵感来源于大疆的Action2 方块相机，啪，即可将旋钮与不同外设进行磁吸配对，待开发稳定后，计划用CNC加工金属的外壳，来配合磁吸达到最舒服的体验。
+
+例如：当同一个旋钮组件，磁吸到物联网中控的底座上面，自动弹出对应的UI界面，同时可以控制智能家具，且在控制台灯亮度和空调温度的时候，会带来不同的旋钮触感反馈。
+
+例如：当同一个旋钮组件，磁吸到PC旋钮底座上面，即可变身为PC的超级旋钮，可以用他做翻页、快捷键、切换应用、调节音量和亮度，只要你喜欢，都可以分别为这几个功能配置不同的阻尼反馈。
+
+将旋钮部分解耦开来，搭配不同的底座，即可实现控制万物，且触感与阻尼感各不相同，这是普通的机械旋钮不能带来的！
+
+## 设计草图
 
 ![my_plan_pic](Docs/images/my_plan_pic.jpg)
 
+## 功能架构
+
+![my_plan_pic](Docs/images/super_knod_xmind.png)
+
+## UI界面演示
+
 ![ui_1](Docs/images/ui_3.png)
 
-#### 软件架构
-
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

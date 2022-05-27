@@ -3,13 +3,14 @@
 #include <TFT_eSPI.h>
 #include <main.h>
 #include <motor.h>
+#include "ui_pages/gui_super_knod.h"
 /*
  * @Descripttion:
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-25 22:17:50
+ * @LastEditTime: 2022-05-27 00:49:54
  */
 
 TimerHandle_t poweron_tmr;
@@ -19,7 +20,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf_1[screenWidth * 30];
 static lv_color_t buf_2[screenWidth * 30];
 
-lv_group_t *defult_group;              //默认组
+lv_ui super_knod_ui;
 lv_indev_t *indev_encoder;      //编码器输入
 LV_IMG_DECLARE(motor_img);      //图片初始化
 LV_IMG_DECLARE(instrument_img); //图片初始化
@@ -427,9 +428,10 @@ void Task_lvgl(void *pvParameters)
     indev_drv.read_cb = encoder_read;
     indev_encoder = lv_indev_drv_register(&indev_drv);
     //想要和按键交互必须创建一个对象组： 并且必须使用以下命令将对象添加到其中
-    defult_group = lv_group_create();
-    lv_group_set_default(defult_group);
-    lv_indev_set_group(indev_encoder, defult_group);
+    
+    super_knod_ui.defult_group = lv_group_create();
+    lv_group_set_default(super_knod_ui.defult_group);
+    lv_indev_set_group(indev_encoder, super_knod_ui.defult_group);
 
     lv_poweron_anim_timeline();
 
