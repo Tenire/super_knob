@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-25 22:14:04
+ * @LastEditTime: 2022-05-28 10:43:31
  */
 #include <motor.h>
 #include <main.h>
@@ -149,7 +149,7 @@ void Task_foc(void *pvParameters)
     //定义电机ID
     command.add('M', onMotor, (char *)"motor");
 
-    motor_shake(5, 3);
+    motor_shake(3, 3);
 
     motor.move(0);
     motor.loopFOC();
