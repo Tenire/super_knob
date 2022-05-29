@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-28 10:43:31
+ * @LastEditTime: 2022-05-29 19:27:36
  */
 #include <motor.h>
 #include <main.h>
@@ -29,7 +29,7 @@ static const float IDLE_CORRECTION_MAX_ANGLE_RAD = 5 * PI / 180;
 static const float IDLE_CORRECTION_RATE_ALPHA = 0.0005;
 
 //先设置一个默认值，等消息队列发送状态过来
-KnobConfig config = {
+KnobConfig motor_config = {
     .num_positions = 32,
     .position = 0,
     .position_width_radians = 8.225806452 * _PI / 180,
@@ -97,6 +97,14 @@ void motor_shake(int strength, int delay_time)
     }
 }
 
+int get_motor_position(void)
+{
+    return motor_config.position;
+}
+
+
+
+
 void Task_foc(void *pvParameters)
 {
     (void)pvParameters;
@@ -162,7 +170,7 @@ void Task_foc(void *pvParameters)
     const float derivative_upper_strength = 1 * 0.02;
     const float derivative_position_width_lower = radians(3);
     const float derivative_position_width_upper = radians(8);
-    const float raw = derivative_lower_strength + (derivative_upper_strength - derivative_lower_strength)/(derivative_position_width_upper - derivative_position_width_lower)*(config.position_width_radians - derivative_position_width_lower);
+    const float raw = derivative_lower_strength + (derivative_upper_strength - derivative_lower_strength)/(derivative_position_width_upper - derivative_position_width_lower)*(motor_config.position_width_radians - derivative_position_width_lower);
     //CLAMP可以将随机变化的值限制在一个给定的区间[min,max]内
     motor.PID_velocity.D = CLAMP(
         raw,
@@ -196,27 +204,27 @@ void Task_foc(void *pvParameters)
         //到控制中心的角度 差值
     float angle_to_detent_center = motor.shaft_angle - current_detent_center;
 
-    if (angle_to_detent_center > config.position_width_radians * config.snap_point && (config.num_positions <= 0 || config.position > 0)) {
-        current_detent_center += config.position_width_radians;
-        angle_to_detent_center -= config.position_width_radians;
-        config.position--;
-    } else if (angle_to_detent_center < -config.position_width_radians * config.snap_point && (config.num_positions <= 0 || config.position < config.num_positions - 1)) {
-        current_detent_center -= config.position_width_radians;
-        angle_to_detent_center += config.position_width_radians;
-        config.position++;
+    if (angle_to_detent_center > motor_config.position_width_radians * motor_config.snap_point && (motor_config.num_positions <= 0 || motor_config.position > 0)) {
+        current_detent_center += motor_config.position_width_radians;
+        angle_to_detent_center -= motor_config.position_width_radians;
+        motor_config.position--;
+    } else if (angle_to_detent_center < -motor_config.position_width_radians * motor_config.snap_point && (motor_config.num_positions <= 0 || motor_config.position < motor_config.num_positions - 1)) {
+        current_detent_center -= motor_config.position_width_radians;
+        angle_to_detent_center += motor_config.position_width_radians;
+        motor_config.position++;
     }
 
     //CLAMP可以将随机变化的值限制在一个给定的区间[min,max]内
     //死区调整
     float dead_zone_adjustment = CLAMP(
         angle_to_detent_center,
-        fmaxf(-config.position_width_radians*DEAD_ZONE_DETENT_PERCENT, -DEAD_ZONE_RAD),
-        fminf(config.position_width_radians*DEAD_ZONE_DETENT_PERCENT, DEAD_ZONE_RAD));
+        fmaxf(-motor_config.position_width_radians*DEAD_ZONE_DETENT_PERCENT, -DEAD_ZONE_RAD),
+        fminf(motor_config.position_width_radians*DEAD_ZONE_DETENT_PERCENT, DEAD_ZONE_RAD));
 
     //出界
-    bool out_of_bounds = config.num_positions > 0 && ((angle_to_detent_center > 0 && config.position == 0) || (angle_to_detent_center < 0 && config.position == config.num_positions - 1));
+    bool out_of_bounds = motor_config.num_positions > 0 && ((angle_to_detent_center > 0 && motor_config.position == 0) || (angle_to_detent_center < 0 && motor_config.position == motor_config.num_positions - 1));
     motor.PID_velocity.limit = 10; //out_of_bounds ? 10 : 3;
-    motor.PID_velocity.P = out_of_bounds ? config.endstop_strength_unit * 4 : config.detent_strength_unit * 4;
+    motor.PID_velocity.P = out_of_bounds ? motor_config.endstop_strength_unit * 4 : motor_config.detent_strength_unit * 4;
 
     //处理float类型的取绝对值
     if (fabsf(motor.shaft_velocity) > 60) {
@@ -228,7 +236,7 @@ void Task_foc(void *pvParameters)
         motor.move(torque);
     }
 
-    //Serial.println(config.position);
+    //Serial.println(motor_config.position);
     vTaskDelay(1);
         
     }

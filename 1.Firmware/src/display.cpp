@@ -10,7 +10,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 13:35:15
+ * @LastEditTime: 2022-05-29 19:29:26
  */
 
 TimerHandle_t poweron_tmr;
@@ -46,18 +46,18 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 {
     static int now_num = 0;
     static int old_num = 0;
-    now_num = config.position;
+    now_num = get_motor_position();
 
     data->enc_diff = 0;
     if (now_num > old_num)
     {
         data->enc_diff++;
-        old_num = config.position;
+        old_num = get_motor_position();
     }
     else if (now_num < old_num)
     {
         data->enc_diff--;
-        old_num = config.position;
+        old_num = get_motor_position();
     }
     Serial.println(touchRead(32));
 

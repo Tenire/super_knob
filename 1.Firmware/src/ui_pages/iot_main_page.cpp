@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 13:32:32
+ * @LastEditTime: 2022-05-29 18:31:38
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -14,7 +14,8 @@ LV_IMG_DECLARE(lamp_img);       //图片初始化
 LV_IMG_DECLARE(leds_img);       //图片初始化
 LV_IMG_DECLARE(socket_img);       //图片初始化
 LV_IMG_DECLARE(computer_img);       //图片初始化
-
+LV_IMG_DECLARE(air_cond_img);       //图片初始化
+LV_IMG_DECLARE(sensor_img);       //图片初始化
 
 static void scroll_event_cb(lv_event_t *e)
 {
@@ -109,16 +110,26 @@ static void lamp_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        //LV_LOG_USER("Clicked");
-            setup_scr_screen_pointer(&super_knod_ui);
-    //禁用加载动画
-    lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        setup_scr_screen_pointer(&super_knod_ui);
+        lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
     }
 }
 
+static void sensor_btn_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        setup_scr_screen_iot_sensor(&super_knod_ui);
+        lv_scr_load_anim(super_knod_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_LOG_USER("Toggled");
+    }
+}
 
 
 void setup_scr_screen_iot_main(lv_ui *ui)
@@ -153,6 +164,13 @@ void setup_scr_screen_iot_main(lv_ui *ui)
 
     lv_obj_t* computer_btn = lv_btn_create(ui->screen_iot_main);
     lv_set_scroll_box(computer_btn, (void *)&computer_img, "电脑");
+
+    lv_obj_t* air_cond_btn = lv_btn_create(ui->screen_iot_main);
+    lv_set_scroll_box(air_cond_btn, (void *)&air_cond_img, "空调");
+
+    lv_obj_t* sensor_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(sensor_btn, sensor_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(sensor_btn, (void *)&sensor_img, "传感");
 
     /*Update the buttons position manually for first*/
     lv_event_send(ui->screen_iot_main, LV_EVENT_SCROLL, NULL);

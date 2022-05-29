@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-22 17:43:13
+ * @LastEditTime: 2022-05-29 19:27:57
  */
 #pragma once
 #include <Arduino.h>
@@ -32,7 +32,7 @@ struct KnobConfig {
     //描述符            
     char descriptor[50];          
 };
-extern KnobConfig config;
+extern KnobConfig motor_config;
 
 typedef enum
 {
@@ -44,5 +44,5 @@ typedef enum
 
 } MOTOR_RUNNING_MODE_E;
 
-
+int get_motor_position(void);
 void Task_foc(void *pvParameters);
