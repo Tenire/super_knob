@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-28 11:45:17
+ * @LastEditTime: 2022-05-29 21:29:20
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -193,4 +193,7 @@ void setup_scr_screen_welcome(lv_ui *ui)
     static uint32_t user_data = 10;
     lv_timer_t *_welcom_timer = lv_timer_create(welcome_timer, 500, &user_data);
     lv_timer_set_repeat_count(_welcom_timer, 1);
+
+    //刷新页面调度器
+    set_super_knod_page_status(WELCOME_PAGE);
 }

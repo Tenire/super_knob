@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 19:28:15
+ * @LastEditTime: 2022-05-29 21:26:43
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -71,6 +71,9 @@ void setup_scr_screen_pointer(lv_ui *ui)
     static uint32_t user_data = 10;
     lv_timer_t *_indic_update_timer = lv_timer_create(indic_update_timer, 100, &user_data);
     lv_timer_set_repeat_count(_indic_update_timer, -1);
+
+    //刷新页面调度器
+    set_super_knod_page_status(IOT_POINTER_PAGE);
 
     /*Create an animation to set the value*/
     // lv_anim_t a;

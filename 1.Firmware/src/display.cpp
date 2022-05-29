@@ -10,7 +10,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 19:29:26
+ * @LastEditTime: 2022-05-30 01:03:17
  */
 
 TimerHandle_t poweron_tmr;
@@ -41,6 +41,52 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 }
 /*-----------------------------------------------------------------------*/
 
+static bool touch_pad_press()
+{
+    static int press_cnt = 0;
+    bool ret_cnt = false;
+    if(touchRead(32) < 15){
+        press_cnt ++;
+        //10ms 消抖
+        if (press_cnt > 4) {
+            if( touchRead(32) < 15){
+                ret_cnt = true;
+                press_cnt = -8;
+            }
+        }
+    }else{
+        press_cnt = 0;
+    }
+    
+    return ret_cnt;
+}
+
+void page_status_check(void)
+{
+    SUPER_KNOD_PAGE_NUM now_page = get_super_knod_page_status();
+    switch (now_page)
+    {
+    // case WELCOME_PAGE:
+    //     break;
+    // case WELCOME_PAGE:
+    //     break;
+    case IOT_SENSOR_PAGE:
+        // set_super_knod_page_status(SUPER_PAGE_BUSY);
+        // setup_scr_screen_pointer(&super_knod_ui);
+        // lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        break;
+    case IOT_POINTER_PAGE:
+        if(touch_pad_press()){
+            set_super_knod_page_status(SUPER_PAGE_BUSY);
+            setup_scr_screen_iot_main(&super_knod_ui);
+        }
+        break;
+    default:
+        break;
+    }
+
+}
+
 /*Will be called by the library to read the encoder*/
 static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 {
@@ -59,13 +105,15 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
         data->enc_diff--;
         old_num = get_motor_position();
     }
-    Serial.println(touchRead(32));
+    //Serial.println(touchRead(32));
 
-    if(touchRead(32) < 15){
+    if(touch_pad_press()){
         data->state = LV_INDEV_STATE_PR;
     }else{
         data->state = LV_INDEV_STATE_REL;
     }
+
+    page_status_check();
 }
 
 void poweron_timeout(TimerHandle_t pxTimer)
@@ -126,8 +174,8 @@ void Task_lvgl(void *pvParameters)
     setup_ui(&super_knod_ui);
 
     //创建开机页面超时定时器
-    poweron_tmr = xTimerCreate("poweron_Timer", (400), pdTRUE, (void *)0, poweron_timeout);
-    xTimerStart(poweron_tmr, 0); //开启倒计时定时器
+    // poweron_tmr = xTimerCreate("poweron_Timer", (400), pdTRUE, (void *)0, poweron_timeout);
+    // xTimerStart(poweron_tmr, 0); //开启倒计时定时器
 
     for (;;)
     {
@@ -135,17 +183,19 @@ void Task_lvgl(void *pvParameters)
         struct _motor_message *motor_message;
         if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)1))
         {
-            Serial.println("------------------------------------>>>>>>");
             Serial.println(motor_message->ucMessageID);
             switch(motor_message->ucMessageID){
                 case MOTOR_INIT:
+                    if(super_knod_ui.power_on_bar)
                     lv_bar_set_value(super_knod_ui.power_on_bar, 30, LV_ANIM_ON);
                 break;
                 case MOTOR_INIT_SUCCESS:
+                    if(super_knod_ui.power_on_bar)
                     lv_bar_set_value(super_knod_ui.power_on_bar, 75, LV_ANIM_ON);
                 break;
                 case MOTOR_INIT_END:
                 {
+                    if(super_knod_ui.power_on_bar)
                     lv_bar_set_value(super_knod_ui.power_on_bar, 100, LV_ANIM_ON);
                     
                     lv_timer_t *_check_timer = lv_timer_create(check_timer, 800, NULL);

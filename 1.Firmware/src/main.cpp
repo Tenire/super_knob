@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-25 21:56:23
+ * @LastEditTime: 2022-05-30 00:50:14
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -19,12 +19,6 @@ QueueHandle_t motor_msg_Queue;  //lvgl 接收消息队列
 QueueHandle_t foc_rcv_Queue;  //foc 接收消息队列
 _motor_message MOTOR_MSG;
 
-
-// void update_motor_status(motor_message *motor_status)
-// {
-    
-//     xQueueSend(motor_msg_Queue, &motor_status, (TickType_t)0);
-// }
 
 void setup()
 {

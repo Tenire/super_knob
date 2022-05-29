@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 19:27:36
+ * @LastEditTime: 2022-05-29 20:51:42
  */
 #include <motor.h>
 #include <main.h>
@@ -102,16 +102,19 @@ int get_motor_position(void)
     return motor_config.position;
 }
 
-
+void update_motor_status(MOTOR_RUNNING_MODE_E motor_status)
+{
+    send_message = &MOTOR_MSG;
+    send_message->ucMessageID = motor_status;
+    xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
+}
 
 
 void Task_foc(void *pvParameters)
 {
     (void)pvParameters;
 
-    send_message = &MOTOR_MSG;
-    send_message->ucMessageID = 0;
-    xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
+    update_motor_status(MOTOR_INIT);
 
     //与I2C接线有关  设置频率
     I2Cone.begin(19, 18, 400000UL);
@@ -147,9 +150,7 @@ void Task_foc(void *pvParameters)
     //校准编码器、启用FOC
     motor.initFOC();
     
-    send_message = &MOTOR_MSG;
-    send_message->ucMessageID = 1;
-    xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
+    update_motor_status(MOTOR_INIT_SUCCESS);
 
     pinMode(LED_PIN, OUTPUT);
     Blink(3);
@@ -178,9 +179,7 @@ void Task_foc(void *pvParameters)
         max(derivative_lower_strength, derivative_upper_strength)
     );
 
-    send_message = &MOTOR_MSG;
-    send_message->ucMessageID = 2;
-    xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
+    update_motor_status(MOTOR_INIT_END);
 
     for (;;)
     {

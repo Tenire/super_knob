@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 16:59:07
+ * @LastEditTime: 2022-05-29 21:28:05
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -62,4 +62,7 @@ void setup_scr_screen_iot_sensor(lv_ui *ui)
     lv_anim_set_playback_time(&a, 2000);
     lv_anim_set_var(&a, indic3);
     lv_anim_start(&a);
+
+    //刷新页面调度器
+    set_super_knod_page_status(IOT_SENSOR_PAGE);
 }
