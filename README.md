@@ -25,3 +25,6 @@ Super knob 是基于ESP32与无刷电机实现的超级旋钮，该项目基于�
 
 ![ui_1](Docs/images/ui_3.png)
 
+## 3D模型（初版）
+
+![ui_1](Docs/images/3Dmodule.jpg)
