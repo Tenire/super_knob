@@ -4,13 +4,13 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 19:27:57
+ * @LastEditTime: 2022-06-03 23:08:34
  */
 #pragma once
 #include <Arduino.h>
 
-#define LVGL_RUNNING_CORE 0 //内核选择   FOC用核心0  其他用核心1
-#define ESP32_RUNNING_CORE 1 //内核选择   FOC用核心0  其他用核心1
+#define LVGL_RUNNING_CORE 0 //内核选择   LVGL用核心0  其他用核心1
+#define ESP32_RUNNING_CORE 1 //内核选择   LVGL用核心0  其他用核心1
 #define LED_PIN 2
 #define pi 3.1415926
 #define init_smooth 1000 // 该值越大，初始化越慢。以防受到干扰。
@@ -45,4 +45,5 @@ typedef enum
 } MOTOR_RUNNING_MODE_E;
 
 int get_motor_position(void);
+void update_motor_config(int status);
 void Task_foc(void *pvParameters);

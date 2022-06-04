@@ -4,12 +4,14 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-30 01:04:06
+ * @LastEditTime: 2022-06-04 12:32:04
  */
 #include "lvgl.h"
 #include <stdio.h>
 #include "gui_super_knod.h"
 #include <Arduino.h>
+#include <motor.h>
+#include <display.h>
 
 LV_IMG_DECLARE(lamp_img);       //图片初始化
 LV_IMG_DECLARE(leds_img);       //图片初始化
@@ -114,6 +116,8 @@ static void lamp_btn_event_handler(lv_event_t * e)
         set_super_knod_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_pointer(&super_knod_ui);
         lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        update_motor_config(4);
+        update_page_status(0);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");

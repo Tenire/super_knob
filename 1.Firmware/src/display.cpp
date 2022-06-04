@@ -10,7 +10,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-30 01:03:17
+ * @LastEditTime: 2022-06-04 12:16:59
  */
 
 TimerHandle_t poweron_tmr;
@@ -61,6 +61,8 @@ static bool touch_pad_press()
     return ret_cnt;
 }
 
+
+//检测页面退出逻辑
 void page_status_check(void)
 {
     SUPER_KNOD_PAGE_NUM now_page = get_super_knod_page_status();
@@ -79,6 +81,9 @@ void page_status_check(void)
         if(touch_pad_press()){
             set_super_knod_page_status(SUPER_PAGE_BUSY);
             setup_scr_screen_iot_main(&super_knod_ui);
+            //禁用加载动画
+            update_motor_config(1);
+            update_page_status(0);
         }
         break;
     default:
@@ -137,6 +142,17 @@ void check_timer(lv_timer_t *timer)
     //lv_scr_load_anim(super_knod_ui.screen_iot_main, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
 }
 
+void update_page_status(int page_status)
+{
+    struct _knod_message *send_message;
+    send_message = &LVGL_MSG;
+    send_message->ucMessageID = page_status;
+    xQueueSend(motor_rcv_Queue, &send_message, (TickType_t)0);
+    
+    Serial.print("-------------------->>>>");
+    Serial.println(send_message->ucMessageID);
+}
+
 
 void Task_lvgl(void *pvParameters)
 {
@@ -172,6 +188,9 @@ void Task_lvgl(void *pvParameters)
     lv_indev_set_group(super_knod_ui.indev_encoder, super_knod_ui.defult_group);
 
     setup_ui(&super_knod_ui);
+    
+    update_motor_config(1);
+    update_page_status(0);
 
     //创建开机页面超时定时器
     // poweron_tmr = xTimerCreate("poweron_Timer", (400), pdTRUE, (void *)0, poweron_timeout);
@@ -180,9 +199,10 @@ void Task_lvgl(void *pvParameters)
     for (;;)
     {
         //监听电机运行状态
-        struct _motor_message *motor_message;
+        struct _knod_message *motor_message;
         if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)1))
         {
+            Serial.print("lvgl_msg_Queue --->");
             Serial.println(motor_message->ucMessageID);
             switch(motor_message->ucMessageID){
                 case MOTOR_INIT:
