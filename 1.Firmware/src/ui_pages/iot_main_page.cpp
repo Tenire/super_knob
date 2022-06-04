@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 12:32:04
+ * @LastEditTime: 2022-06-04 14:57:58
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -138,6 +138,20 @@ static void sensor_btn_event_handler(lv_event_t * e)
     }
 }
 
+static void sensor_computer_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        set_super_knod_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_player(&super_knod_ui);
+        lv_scr_load_anim(super_knod_ui.screen_iot_player, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_LOG_USER("Toggled");
+    }
+
+}
+
 
 void setup_scr_screen_iot_main(lv_ui *ui)
 {
@@ -170,6 +184,7 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     lv_set_scroll_box(socket_btn, (void *)&socket_img, "插座");
 
     lv_obj_t* computer_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(computer_btn, sensor_computer_event_handler, LV_EVENT_ALL, NULL);
     lv_set_scroll_box(computer_btn, (void *)&computer_img, "电脑");
 
     lv_obj_t* air_cond_btn = lv_btn_create(ui->screen_iot_main);
