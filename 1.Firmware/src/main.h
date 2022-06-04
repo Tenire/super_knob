@@ -4,13 +4,13 @@
  * @Author: congsir
  * @Date: 2022-05-15 17:02:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 15:30:05
+ * @LastEditTime: 2022-06-04 23:34:01
  */
 #pragma once
 
 #include <Arduino.h>
 
-//#define ENABLE_BLE_KEY_BOARD
+#define ENABLE_BLE_KEY_BOARD 1
 
 struct _knod_message
 {

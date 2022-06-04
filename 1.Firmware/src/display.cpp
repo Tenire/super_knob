@@ -10,7 +10,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 12:16:59
+ * @LastEditTime: 2022-06-05 00:30:05
  */
 
 TimerHandle_t poweron_tmr;
@@ -73,15 +73,11 @@ void page_status_check(void)
     // case WELCOME_PAGE:
     //     break;
     case IOT_SENSOR_PAGE:
-        // set_super_knod_page_status(SUPER_PAGE_BUSY);
-        // setup_scr_screen_pointer(&super_knod_ui);
-        // lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
-        break;
     case IOT_POINTER_PAGE:
         if(touch_pad_press()){
-            set_super_knod_page_status(SUPER_PAGE_BUSY);
             setup_scr_screen_iot_main(&super_knod_ui);
-            //禁用加载动画
+            lv_scr_load_anim(super_knod_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            set_super_knod_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
             update_page_status(0);
         }
@@ -135,11 +131,11 @@ void poweron_timeout(TimerHandle_t pxTimer)
 
 
 
-void check_timer(lv_timer_t *timer)
+void check_timerout(lv_timer_t *timer)
 {
     setup_scr_screen_iot_main(&super_knod_ui);
-    //禁用加载动画
-    //lv_scr_load_anim(super_knod_ui.screen_iot_main, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+    //加载动画
+    lv_scr_load_anim(super_knod_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_OVER_TOP, 200, 50, true);
 }
 
 void update_page_status(int page_status)
@@ -218,7 +214,7 @@ void Task_lvgl(void *pvParameters)
                     if(super_knod_ui.power_on_bar)
                     lv_bar_set_value(super_knod_ui.power_on_bar, 100, LV_ANIM_ON);
                     
-                    lv_timer_t *_check_timer = lv_timer_create(check_timer, 800, NULL);
+                    lv_timer_t *_check_timer = lv_timer_create(check_timerout, 800, NULL);
                     lv_timer_set_repeat_count(_check_timer, 1);
                 }    
                 break;

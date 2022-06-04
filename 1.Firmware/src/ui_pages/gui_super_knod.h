@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 14:23:22
+ * @LastEditTime: 2022-06-04 23:53:10
  */
 /*
  * Copyright 2022 NXP
@@ -23,6 +23,7 @@ typedef struct
     lv_obj_t *power_on_bar;
 	lv_obj_t *screen_welcome;
 	lv_obj_t *screen_iot_main;
+    lv_obj_t *screen_iot_main_boday;
     lv_obj_t *screen_iot_pointer;
     lv_meter_indicator_t * screen_iot_pointer_indic;
 

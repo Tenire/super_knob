@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 21:29:20
+ * @LastEditTime: 2022-06-04 23:41:54
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -139,6 +139,7 @@ void welcome_timer(lv_timer_t *timer)
 void setup_scr_screen_welcome(lv_ui *ui)
 {
     ui->screen_welcome = lv_obj_create(NULL);
+    lv_obj_set_size(ui->screen_welcome, 240, 240);
     lv_obj_set_flex_flow(ui->screen_welcome, LV_FLEX_FLOW_ROW); //将子元素 排成一行
     lv_obj_set_flex_align(ui->screen_welcome, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 

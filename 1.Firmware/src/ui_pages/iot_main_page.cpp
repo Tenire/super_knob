@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 14:57:58
+ * @LastEditTime: 2022-06-05 00:25:59
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -115,7 +115,7 @@ static void lamp_btn_event_handler(lv_event_t * e)
     if(code == LV_EVENT_CLICKED) {
         set_super_knod_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_pointer(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
         update_motor_config(4);
         update_page_status(0);
     }
@@ -160,9 +160,13 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     // lv_style_init(&style_iot_main);
     // lv_style_set_border_side(&style_iot_main,LV_BORDER_SIDE_NONE);
 
-    ui->screen_iot_main = lv_obj_create(lv_scr_act());
+    ui->screen_iot_main_boday = lv_obj_create(NULL);
+    lv_obj_set_size(ui->screen_iot_main_boday, 240, 240);
+
+    ui->screen_iot_main = lv_obj_create(ui->screen_iot_main_boday);
     lv_obj_set_size(ui->screen_iot_main, 240, 240);
     lv_obj_center(ui->screen_iot_main);
+    
     lv_obj_set_flex_flow(ui->screen_iot_main, LV_FLEX_FLOW_COLUMN);
     lv_obj_add_event_cb(ui->screen_iot_main, scroll_event_cb, LV_EVENT_SCROLL, NULL); //每次位置变化时触发
     lv_obj_set_style_radius(ui->screen_iot_main, LV_RADIUS_CIRCLE, 0); //设置为圆形
