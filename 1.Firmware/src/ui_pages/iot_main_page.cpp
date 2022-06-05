@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-05 00:25:59
+ * @LastEditTime: 2022-06-05 17:45:05
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -116,7 +116,7 @@ static void lamp_btn_event_handler(lv_event_t * e)
         set_super_knod_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_pointer(&super_knod_ui);
         lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
-        update_motor_config(4);
+        update_motor_config(2);
         update_page_status(0);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
