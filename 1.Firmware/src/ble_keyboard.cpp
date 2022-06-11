@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 14:06:00
+ * @LastEditTime: 2022-06-11 12:49:20
  */
 #include <main.h>
 #include <BleKeyboard.h>
@@ -31,4 +31,14 @@ void keyboard_enable_player(void)
     
     Serial.println("Sending Play/Pause media key...");
     bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
+}
+
+int keyboard_player_next(void)
+{
+    if(!check_keyboard_connected())
+    return -1;
+    
+    Serial.println("Sending Play/Pause media key...");
+    bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
+    return 0;
 }

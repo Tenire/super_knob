@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 12:34:55
+ * @LastEditTime: 2022-06-08 22:32:00
  */
 #include <motor.h>
 #include <main.h>
@@ -284,6 +284,7 @@ void Task_foc(void *pvParameters)
         // If we are not moving and we're close to the center (but not exactly there), slowly adjust the centerpoint to match the current position
         if (last_idle_start > 0 && millis() - last_idle_start > IDLE_CORRECTION_DELAY_MILLIS && fabsf(motor.shaft_angle - current_detent_center) < IDLE_CORRECTION_MAX_ANGLE_RAD)
         {
+            //Serial.println("slowly adjust the centerpoint to match the current position......");
             current_detent_center = motor.shaft_angle * IDLE_CORRECTION_RATE_ALPHA + current_detent_center * (1 - IDLE_CORRECTION_RATE_ALPHA);
         }
 
@@ -312,7 +313,7 @@ void Task_foc(void *pvParameters)
 
         //出界
         bool out_of_bounds = motor_config.num_positions > 0 && ((angle_to_detent_center > 0 && motor_config.position == 0) || (angle_to_detent_center < 0 && motor_config.position == motor_config.num_positions - 1));
-        motor.PID_velocity.limit = 10; // out_of_bounds ? 10 : 3;
+        motor.PID_velocity.limit = out_of_bounds ? 10 : 3;
         motor.PID_velocity.P = out_of_bounds ? motor_config.endstop_strength_unit * 4 : motor_config.detent_strength_unit * 4;
 
         //处理float类型的取绝对值
@@ -320,6 +321,7 @@ void Task_foc(void *pvParameters)
         {
             //如果速度太高 则不增加扭矩
             // Don't apply torque if velocity is too high (helps avoid positive feedback loop/runaway)
+            Serial.println("(motor.shaft_velocity) > 60 !!!");
             motor.move(0);
         }
         else

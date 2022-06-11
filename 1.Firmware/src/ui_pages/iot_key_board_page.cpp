@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-06 01:34:44
+ * @LastEditTime: 2022-06-11 21:04:54
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -14,10 +14,16 @@
 #include <display.h>
 
 lv_obj_t * btn_control  = NULL;
+lv_obj_t * player_img_center = NULL;
+lv_anim_t player_anim;
 
-LV_IMG_DECLARE(music_img);       //图片初始化
-LV_IMG_DECLARE(music_open_img);       //图片初始化
-LV_IMG_DECLARE(music_stop_img);       //图片初始化
+LV_IMG_DECLARE(music_close_img);       //图片初始化
+LV_IMG_DECLARE(music_exit_img); 
+LV_IMG_DECLARE(music_img);
+LV_IMG_DECLARE(music_next_img);        
+LV_IMG_DECLARE(music_last_img);
+LV_IMG_DECLARE(music_open_img);  
+LV_IMG_DECLARE(music_stop_img);      
 
 static void exit_btn_event_handler(lv_event_t * e)
 {
@@ -37,19 +43,69 @@ static void exit_btn_event_handler(lv_event_t * e)
 static void player_btn_control_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
+    static int play_cnt = 0;
     if(code == LV_EVENT_CLICKED) {
         keyboard_enable_player();
+        if (play_cnt){
+            lv_anim_del(player_img_center, NULL);
+            lv_img_set_src(super_knod_ui.screen_iot_player_play_img, &music_open_img);
+            lv_img_set_src(player_img_center, &music_close_img);
+            play_cnt = 0;
+        }else{
+            play_cnt = 1;
+            lv_anim_start(&player_anim);
+            lv_img_set_src(super_knod_ui.screen_iot_player_play_img, &music_stop_img);
+            lv_img_set_src(player_img_center, &music_img);
+        }
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //keyboard_enable_player();
     }
 }
 
+static void player_btn_next_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        keyboard_player_next();
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+
+    }
+}
+
+
+static void player_btn_last_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        keyboard_player_next();
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+
+    }
+}
+
+static void anim_y_cb(void * var, int32_t v)
+{
+    lv_obj_set_y((lv_obj_t*)var, v);
+}
+
+static void anim_size_cb(void * var, int32_t v)
+{
+    lv_obj_set_size((lv_obj_t*)var, v, v);
+}
+
+
 void setup_scr_screen_player(lv_ui *ui)
 {
     ui->screen_iot_player = lv_obj_create(NULL);
     lv_obj_set_size(ui->screen_iot_player, 240, 240);
     lv_obj_center(ui->screen_iot_player);
+
+    static lv_style_t style_none_opa_btn;
+    lv_style_init(&style_none_opa_btn);
+    lv_style_set_bg_opa(&style_none_opa_btn, 0); //设置背景透明
 
     /*Init the style for the default state*/
     static lv_style_t style;
@@ -98,29 +154,78 @@ void setup_scr_screen_player(lv_ui *ui)
 
     lv_obj_t * exit_btn = lv_btn_create(ui->screen_iot_player);
     lv_obj_add_event_cb(exit_btn, exit_btn_event_handler, LV_EVENT_ALL, NULL);
-    //lv_obj_remove_style_all(btn1);                          /*Remove the style coming from the theme*/
+    lv_obj_set_style_radius(exit_btn, LV_RADIUS_CIRCLE, 0); //设置为圆形
+    lv_obj_set_size(exit_btn, 32, 32);
+    lv_obj_t * img_test = lv_img_create(exit_btn);
+    lv_img_set_src(img_test, &music_exit_img);
+    lv_obj_center(img_test);
+
     lv_obj_add_style(exit_btn, &style, 0);
     lv_obj_add_style(exit_btn, &style_pr, LV_STATE_PRESSED);
-    lv_obj_set_size(exit_btn, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    lv_obj_align(exit_btn, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align(exit_btn, LV_ALIGN_TOP_MID, 0, 10);
 
-    lv_obj_t * label = lv_label_create(exit_btn);
-    lv_label_set_text(label, "EXIT");
-    lv_obj_center(label);
 
-    lv_obj_t * img_1= lv_img_create(ui->screen_iot_player);
-    lv_img_set_src(img_1, &music_img);
-    lv_obj_center(img_1);
+    player_img_center= lv_img_create(ui->screen_iot_player);
+    lv_img_set_src(player_img_center, &music_close_img);
+    lv_obj_center(player_img_center);
+    //lv_group_add_obj(super_knod_ui.defult_group, img_1);
 
+    //-------------------------button_last----------------------------------//
+    lv_obj_t * btn_last = lv_btn_create(ui->screen_iot_player);
+    lv_obj_add_event_cb(btn_last, player_btn_last_event_handler, LV_EVENT_ALL, NULL);
+    lv_obj_set_style_radius(btn_last, LV_RADIUS_CIRCLE, 0); //设置为圆形
+    lv_obj_set_size(btn_last, 45, 45);
+    
+    lv_obj_t * btn_last_img = lv_img_create(btn_last);
+    lv_img_set_src(btn_last_img, &music_last_img);
+    lv_obj_center(btn_last_img);
+
+    lv_obj_add_style(btn_last, &style_none_opa_btn, 0);
+    lv_obj_add_style(btn_last, &style_pr, LV_STATE_PRESSED);
+    lv_obj_align(btn_last, LV_ALIGN_BOTTOM_MID, -55, -23);
+
+    //-------------------------button_control----------------------------------//
     lv_obj_t * btn_control = lv_btn_create(ui->screen_iot_player);
     lv_obj_add_event_cb(btn_control, player_btn_control_event_handler, LV_EVENT_ALL, NULL);
     lv_obj_add_style(btn_control, &style, 0);
     lv_obj_add_style(btn_control, &style_pr, LV_STATE_PRESSED);
     lv_obj_set_size(btn_control, 48, 48);
-    lv_obj_t *img1 = lv_img_create(btn_control);
-    lv_img_set_src(img1, &music_open_img);
-    lv_obj_center(img1);
+    ui->screen_iot_player_play_img = lv_img_create(btn_control);
+    lv_img_set_src(ui->screen_iot_player_play_img, &music_open_img);
+    lv_obj_center(ui->screen_iot_player_play_img);
     lv_obj_align(btn_control, LV_ALIGN_BOTTOM_MID, 0, -10);
+
+    //-------------------------button_next----------------------------------//
+    lv_obj_t * btn_next = lv_btn_create(ui->screen_iot_player);
+    lv_obj_add_event_cb(btn_next, player_btn_next_event_handler, LV_EVENT_ALL, NULL);
+    lv_obj_set_style_radius(btn_next, LV_RADIUS_CIRCLE, 0); //设置为圆形
+    lv_obj_set_size(btn_next, 45, 45);
+    
+    lv_obj_t * btn_next_img = lv_img_create(btn_next);
+    lv_img_set_src(btn_next_img, &music_next_img);
+    lv_obj_center(btn_next_img);
+
+    lv_obj_add_style(btn_next, &style_none_opa_btn, 0);
+    lv_obj_add_style(btn_next, &style_pr, LV_STATE_PRESSED);
+    lv_obj_align(btn_next, LV_ALIGN_BOTTOM_MID, 55, -23);
+
+    //设计播放音乐的动画
+
+    lv_anim_init(&player_anim);
+    lv_anim_set_var(&player_anim, player_img_center);
+    lv_anim_set_time(&player_anim, 800);
+    lv_anim_set_playback_delay(&player_anim, 100);                   //开始播放动画前的延时
+    lv_anim_set_playback_time(&player_anim, 300);
+    lv_anim_set_repeat_delay(&player_anim, 300);                     //重复之前的延迟
+    lv_anim_set_repeat_count(&player_anim, LV_ANIM_REPEAT_INFINITE); //动画重复
+    lv_anim_set_path_cb(&player_anim, lv_anim_path_ease_out);
+
+    // lv_anim_set_exec_cb(&a, anim_size_cb);
+    // lv_anim_start(&a);
+    lv_anim_set_exec_cb(&player_anim, anim_y_cb);
+    lv_anim_set_values(&player_anim, 0, 10);
+    //lv_anim_start(&player_anim);
+    
 
 
     //刷新页面调度器
