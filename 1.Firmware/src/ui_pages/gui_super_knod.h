@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-10 23:32:08
+ * @LastEditTime: 2022-06-18 19:10:30
  */
 /*
  * Copyright 2022 NXP
@@ -31,6 +31,8 @@ typedef struct
     lv_obj_t *screen_iot_sensor;
     lv_obj_t *screen_iot_player;
     lv_obj_t *screen_iot_player_play_img;
+
+    lv_obj_t *screen_iot_tomato_clock;
     
     lv_indev_t *indev_encoder; //编码器输入
     lv_group_t *defult_group;  //默认组   
@@ -56,6 +58,7 @@ void setup_scr_screen_pointer(lv_ui *ui);
 void setup_scr_screen_alarm_clock(lv_ui *ui);
 void setup_scr_screen_iot_sensor(lv_ui *ui);
 void setup_scr_screen_player(lv_ui *ui);
+void setup_scr_screen_tomato_clock(lv_ui *ui);
 
 void set_super_knod_page_status(SUPER_KNOD_PAGE_NUM now_page);
 SUPER_KNOD_PAGE_NUM get_super_knod_page_status(void);

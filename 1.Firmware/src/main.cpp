@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 23:35:55
+ * @LastEditTime: 2022-06-18 18:00:00
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -29,6 +29,7 @@ void setup()
 {
     pinMode(LED_PIN, OUTPUT);
     Serial.begin(115200);
+    Serial2.begin(115200);
     #ifdef ENABLE_BLE_KEY_BOARD
     ble_keyboard_init();
     #endif

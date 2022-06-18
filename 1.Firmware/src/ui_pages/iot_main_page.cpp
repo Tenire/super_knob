@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-05 17:45:05
+ * @LastEditTime: 2022-06-18 19:26:24
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -13,12 +13,14 @@
 #include <motor.h>
 #include <display.h>
 
-LV_IMG_DECLARE(lamp_img);       //图片初始化
-LV_IMG_DECLARE(leds_img);       //图片初始化
-LV_IMG_DECLARE(socket_img);       //图片初始化
-LV_IMG_DECLARE(computer_img);       //图片初始化
-LV_IMG_DECLARE(air_cond_img);       //图片初始化
-LV_IMG_DECLARE(sensor_img);       //图片初始化
+//图片初始化
+LV_IMG_DECLARE(lamp_img);
+LV_IMG_DECLARE(leds_img);
+LV_IMG_DECLARE(socket_img);
+LV_IMG_DECLARE(computer_img);
+LV_IMG_DECLARE(air_cond_img);
+LV_IMG_DECLARE(sensor_img);
+LV_IMG_DECLARE(fan_img);
 
 static void scroll_event_cb(lv_event_t *e)
 {
@@ -152,6 +154,21 @@ static void sensor_computer_event_handler(lv_event_t * e)
 
 }
 
+static void fan_btn_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        set_super_knod_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_tomato_clock(&super_knod_ui);
+        lv_scr_load_anim(super_knod_ui.screen_iot_tomato_clock, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_LOG_USER("Toggled");
+    }
+
+}
+
 
 void setup_scr_screen_iot_main(lv_ui *ui)
 {
@@ -183,6 +200,10 @@ void setup_scr_screen_iot_main(lv_ui *ui)
 
     lv_obj_t* leds_btn = lv_btn_create(ui->screen_iot_main);
     lv_set_scroll_box(leds_btn, (void *)&leds_img, "灯带");
+
+    lv_obj_t* fan_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(fan_btn, fan_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(fan_btn, (void *)&fan_img, "风扇");
 
     lv_obj_t* socket_btn = lv_btn_create(ui->screen_iot_main);
     lv_set_scroll_box(socket_btn, (void *)&socket_img, "插座");
