@@ -4,11 +4,11 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 19:26:24
+ * @LastEditTime: 2022-06-18 23:26:30
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 #include <Arduino.h>
 #include <motor.h>
 #include <display.h>
@@ -115,9 +115,9 @@ static void lamp_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        set_super_knod_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_pointer(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_pointer(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
         update_motor_config(2);
         update_page_status(0);
     }
@@ -131,9 +131,9 @@ static void sensor_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        set_super_knod_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_iot_sensor(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_iot_sensor(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
@@ -144,9 +144,9 @@ static void sensor_computer_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
-        set_super_knod_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_player(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_player, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_player(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_iot_player, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
@@ -159,9 +159,9 @@ static void fan_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        set_super_knod_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_tomato_clock(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_tomato_clock, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_tomato_clock(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_iot_tomato_clock, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
@@ -226,7 +226,7 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     lv_obj_scroll_to_view(lv_obj_get_child(ui->screen_iot_main, 0), LV_ANIM_OFF);
 
     //刷新页面调度器
-    set_super_knod_page_status(IOT_MAIN_PAGE);
+    set_super_knob_page_status(IOT_MAIN_PAGE);
 }
 
 

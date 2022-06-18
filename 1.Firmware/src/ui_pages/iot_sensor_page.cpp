@@ -4,16 +4,16 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 21:28:05
+ * @LastEditTime: 2022-06-18 23:26:39
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 
 
 static void set_value(void * indic, int32_t v)
 {
-    lv_meter_set_indicator_end_value(super_knod_ui.screen_iot_sensor, (lv_meter_indicator_t *)indic, v);
+    lv_meter_set_indicator_end_value(super_knob_ui.screen_iot_sensor, (lv_meter_indicator_t *)indic, v);
 }
 
 /**
@@ -64,5 +64,5 @@ void setup_scr_screen_iot_sensor(lv_ui *ui)
     lv_anim_start(&a);
 
     //刷新页面调度器
-    set_super_knod_page_status(IOT_SENSOR_PAGE);
+    set_super_knob_page_status(IOT_SENSOR_PAGE);
 }

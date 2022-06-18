@@ -4,22 +4,22 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:23
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 22:43:01
+ * @LastEditTime: 2022-06-18 23:26:24
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 
-static SUPER_KNOD_PAGE_NUM super_knod_now  = WELCOME_PAGE;
+static SUPER_KNOB_PAGE_NUM super_knob_now  = WELCOME_PAGE;
 
-SUPER_KNOD_PAGE_NUM get_super_knod_page_status(void)
+SUPER_KNOB_PAGE_NUM get_super_knob_page_status(void)
 {
-    return super_knod_now;
+    return super_knob_now;
 }
 
-void set_super_knod_page_status(SUPER_KNOD_PAGE_NUM now_page)
+void set_super_knob_page_status(SUPER_KNOB_PAGE_NUM now_page)
 {
-    super_knod_now = now_page;
+    super_knob_now = now_page;
 }
 
 

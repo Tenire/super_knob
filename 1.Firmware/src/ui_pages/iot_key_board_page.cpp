@@ -4,11 +4,11 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-11 21:04:54
+ * @LastEditTime: 2022-06-18 23:26:27
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 #include <ble_keyboard.h>
 #include <motor.h>
 #include <display.h>
@@ -29,9 +29,9 @@ static void exit_btn_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
-        setup_scr_screen_iot_main(&super_knod_ui);
-        lv_scr_load_anim(super_knod_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
-        set_super_knod_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_iot_main(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
         update_motor_config(1);
         update_page_status(0);
     }
@@ -48,13 +48,13 @@ static void player_btn_control_event_handler(lv_event_t * e)
         keyboard_enable_player();
         if (play_cnt){
             lv_anim_del(player_img_center, NULL);
-            lv_img_set_src(super_knod_ui.screen_iot_player_play_img, &music_open_img);
+            lv_img_set_src(super_knob_ui.screen_iot_player_play_img, &music_open_img);
             lv_img_set_src(player_img_center, &music_close_img);
             play_cnt = 0;
         }else{
             play_cnt = 1;
             lv_anim_start(&player_anim);
-            lv_img_set_src(super_knod_ui.screen_iot_player_play_img, &music_stop_img);
+            lv_img_set_src(super_knob_ui.screen_iot_player_play_img, &music_stop_img);
             lv_img_set_src(player_img_center, &music_img);
         }
     }
@@ -168,7 +168,7 @@ void setup_scr_screen_player(lv_ui *ui)
     player_img_center= lv_img_create(ui->screen_iot_player);
     lv_img_set_src(player_img_center, &music_close_img);
     lv_obj_center(player_img_center);
-    //lv_group_add_obj(super_knod_ui.defult_group, img_1);
+    //lv_group_add_obj(super_knob_ui.defult_group, img_1);
 
     //-------------------------button_last----------------------------------//
     lv_obj_t * btn_last = lv_btn_create(ui->screen_iot_player);
@@ -229,5 +229,5 @@ void setup_scr_screen_player(lv_ui *ui)
 
 
     //刷新页面调度器
-    set_super_knod_page_status(IOT_COMPUTER_PAGE);
+    set_super_knob_page_status(IOT_COMPUTER_PAGE);
 }

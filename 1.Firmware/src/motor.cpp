@@ -4,13 +4,13 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-08 22:32:00
+ * @LastEditTime: 2022-06-18 23:25:57
  */
 #include <motor.h>
 #include <main.h>
 #include <SimpleFOC.h>
 
-static KnobConfig super_knod_configs[] = {
+static KnobConfig super_knob_configs[] = {
     {
         0,
         0,
@@ -160,7 +160,7 @@ int get_motor_position(void)
 
 void update_motor_status(MOTOR_RUNNING_MODE_E motor_status)
 {
-    struct _knod_message *send_message;
+    struct _knob_message *send_message;
     send_message = &MOTOR_MSG;
     send_message->ucMessageID = motor_status;
     xQueueSend(motor_msg_Queue, &send_message, (TickType_t)0);
@@ -168,7 +168,7 @@ void update_motor_status(MOTOR_RUNNING_MODE_E motor_status)
 
 void update_motor_config(int status)
 {
-    motor_config = super_knod_configs[status];
+    motor_config = super_knob_configs[status];
 }
 
 void Task_foc(void *pvParameters)
@@ -235,7 +235,7 @@ void Task_foc(void *pvParameters)
     {
         motor.loopFOC();
         //监听页面状态
-        struct _knod_message *lvgl_message;
+        struct _knob_message *lvgl_message;
         if (xQueueReceive(motor_rcv_Queue, &(lvgl_message), (TickType_t)0))
         {
             Serial.print("motor_rcv_Queue --->");

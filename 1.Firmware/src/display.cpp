@@ -3,14 +3,14 @@
 #include <TFT_eSPI.h>
 #include <main.h>
 #include <motor.h>
-#include "ui_pages/gui_super_knod.h"
+#include "ui_pages/gui_super_knob.h"
 /*
  * @Descripttion:
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-05 00:30:05
+ * @LastEditTime: 2022-06-18 23:27:37
  */
 
 TimerHandle_t poweron_tmr;
@@ -20,7 +20,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf_1[screenWidth * 30];
 static lv_color_t buf_2[screenWidth * 30];
 
-lv_ui super_knod_ui;
+lv_ui super_knob_ui;
 
 
 TFT_eSPI tft = TFT_eSPI(screenWidth, screenHeight); /* TFT instance */
@@ -65,7 +65,7 @@ static bool touch_pad_press()
 //检测页面退出逻辑
 void page_status_check(void)
 {
-    SUPER_KNOD_PAGE_NUM now_page = get_super_knod_page_status();
+    SUPER_KNOB_PAGE_NUM now_page = get_super_knob_page_status();
     switch (now_page)
     {
     // case WELCOME_PAGE:
@@ -75,9 +75,9 @@ void page_status_check(void)
     case IOT_SENSOR_PAGE:
     case IOT_POINTER_PAGE:
         if(touch_pad_press()){
-            setup_scr_screen_iot_main(&super_knod_ui);
-            lv_scr_load_anim(super_knod_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
-            set_super_knod_page_status(SUPER_PAGE_BUSY);
+            setup_scr_screen_iot_main(&super_knob_ui);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            set_super_knob_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
             update_page_status(0);
         }
@@ -133,14 +133,14 @@ void poweron_timeout(TimerHandle_t pxTimer)
 
 void check_timerout(lv_timer_t *timer)
 {
-    setup_scr_screen_iot_main(&super_knod_ui);
+    setup_scr_screen_iot_main(&super_knob_ui);
     //加载动画
-    lv_scr_load_anim(super_knod_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_OVER_TOP, 200, 50, true);
+    lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_OVER_TOP, 200, 50, true);
 }
 
 void update_page_status(int page_status)
 {
-    struct _knod_message *send_message;
+    struct _knob_message *send_message;
     send_message = &LVGL_MSG;
     send_message->ucMessageID = page_status;
     xQueueSend(motor_rcv_Queue, &send_message, (TickType_t)0);
@@ -176,14 +176,14 @@ void Task_lvgl(void *pvParameters)
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_ENCODER;
     indev_drv.read_cb = encoder_read;
-    super_knod_ui.indev_encoder = lv_indev_drv_register(&indev_drv);
+    super_knob_ui.indev_encoder = lv_indev_drv_register(&indev_drv);
     //想要和按键交互必须创建一个对象组： 并且必须使用以下命令将对象添加到其中
     
-    super_knod_ui.defult_group = lv_group_create();
-    lv_group_set_default(super_knod_ui.defult_group);
-    lv_indev_set_group(super_knod_ui.indev_encoder, super_knod_ui.defult_group);
+    super_knob_ui.defult_group = lv_group_create();
+    lv_group_set_default(super_knob_ui.defult_group);
+    lv_indev_set_group(super_knob_ui.indev_encoder, super_knob_ui.defult_group);
 
-    setup_ui(&super_knod_ui);
+    setup_ui(&super_knob_ui);
     
     update_motor_config(1);
     update_page_status(0);
@@ -195,24 +195,24 @@ void Task_lvgl(void *pvParameters)
     for (;;)
     {
         //监听电机运行状态
-        struct _knod_message *motor_message;
+        struct _knob_message *motor_message;
         if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)1))
         {
             Serial.print("lvgl_msg_Queue --->");
             Serial.println(motor_message->ucMessageID);
             switch(motor_message->ucMessageID){
                 case MOTOR_INIT:
-                    if(super_knod_ui.power_on_bar)
-                    lv_bar_set_value(super_knod_ui.power_on_bar, 30, LV_ANIM_ON);
+                    if(super_knob_ui.power_on_bar)
+                    lv_bar_set_value(super_knob_ui.power_on_bar, 30, LV_ANIM_ON);
                 break;
                 case MOTOR_INIT_SUCCESS:
-                    if(super_knod_ui.power_on_bar)
-                    lv_bar_set_value(super_knod_ui.power_on_bar, 75, LV_ANIM_ON);
+                    if(super_knob_ui.power_on_bar)
+                    lv_bar_set_value(super_knob_ui.power_on_bar, 75, LV_ANIM_ON);
                 break;
                 case MOTOR_INIT_END:
                 {
-                    if(super_knod_ui.power_on_bar)
-                    lv_bar_set_value(super_knod_ui.power_on_bar, 100, LV_ANIM_ON);
+                    if(super_knob_ui.power_on_bar)
+                    lv_bar_set_value(super_knob_ui.power_on_bar, 100, LV_ANIM_ON);
                     
                     lv_timer_t *_check_timer = lv_timer_create(check_timerout, 800, NULL);
                     lv_timer_set_repeat_count(_check_timer, 1);

@@ -4,15 +4,15 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 19:10:30
+ * @LastEditTime: 2022-06-18 23:27:59
  */
 /*
  * Copyright 2022 NXP
  * SPDX-License-Identifier: MIT
  */
 
-#ifndef GUI_SUPER_KNOD_H
-#define GUI_SUPER_KNOD_H
+#ifndef GUI_SUPER_KNOB_H
+#define GUI_SUPER_KNOB_H
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,10 +48,10 @@ typedef enum
 
     SUPER_PAGE_BUSY,
     SUPER_PAGE_MAX,
-} SUPER_KNOD_PAGE_NUM;
+} SUPER_KNOB_PAGE_NUM;
 
 void setup_ui(lv_ui *ui);
-extern lv_ui super_knod_ui;
+extern lv_ui super_knob_ui;
 void setup_scr_screen_welcome(lv_ui *ui);
 void setup_scr_screen_iot_main(lv_ui *ui);
 void setup_scr_screen_pointer(lv_ui *ui);
@@ -60,8 +60,8 @@ void setup_scr_screen_iot_sensor(lv_ui *ui);
 void setup_scr_screen_player(lv_ui *ui);
 void setup_scr_screen_tomato_clock(lv_ui *ui);
 
-void set_super_knod_page_status(SUPER_KNOD_PAGE_NUM now_page);
-SUPER_KNOD_PAGE_NUM get_super_knod_page_status(void);
+void set_super_knob_page_status(SUPER_KNOB_PAGE_NUM now_page);
+SUPER_KNOB_PAGE_NUM get_super_knob_page_status(void);
 
 
 /*

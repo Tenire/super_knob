@@ -4,18 +4,18 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-29 16:53:49
+ * @LastEditTime: 2022-06-18 23:26:59
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 
 
 
 
 static void set_value(void * indic, int32_t v)
 {
-    lv_meter_set_indicator_end_value(super_knod_ui.screen_alarm_clock, (lv_meter_indicator_t *)indic, v);
+    lv_meter_set_indicator_end_value(super_knob_ui.screen_alarm_clock, (lv_meter_indicator_t *)indic, v);
 }
 
 /**
@@ -46,7 +46,7 @@ void setup_scr_screen_alarm_clock(lv_ui *ui)
     lv_meter_indicator_t * indic_min = lv_meter_add_needle_img(ui->screen_alarm_clock, scale_min, &clock_img_hand, 5, 5);
     lv_meter_indicator_t * indic_hour = lv_meter_add_needle_img(ui->screen_alarm_clock, scale_min, &clock_img_hand, 5, 5);
 
-    //lv_meter_set_indicator_value(super_knod_ui.screen_alarm_clock, indic_min, 25); 主动设置数值
+    //lv_meter_set_indicator_value(super_knob_ui.screen_alarm_clock, indic_min, 25); 主动设置数值
 
     /*Create an animation to set the value*/
     lv_anim_t a;

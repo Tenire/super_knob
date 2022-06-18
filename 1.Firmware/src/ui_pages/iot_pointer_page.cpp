@@ -4,18 +4,18 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 23:44:31
+ * @LastEditTime: 2022-06-18 23:26:34
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 #include <motor.h>
 
 
 
 static void set_value(void * indic, int32_t v)
 {
-    lv_meter_set_indicator_value(super_knod_ui.screen_iot_pointer, (lv_meter_indicator_t *)indic, v);
+    lv_meter_set_indicator_value(super_knob_ui.screen_iot_pointer, (lv_meter_indicator_t *)indic, v);
 }
 
 void indic_update_timer(lv_timer_t *timer)
@@ -23,7 +23,7 @@ void indic_update_timer(lv_timer_t *timer)
     /*Use the user_data*/
     uint32_t *user_data = (uint32_t *)timer->user_data;
     //Serial.println(*user_data);
-    lv_meter_set_indicator_value(super_knod_ui.screen_iot_pointer, super_knod_ui.screen_iot_pointer_indic, get_motor_position()); //主动设置数值
+    lv_meter_set_indicator_value(super_knob_ui.screen_iot_pointer, super_knob_ui.screen_iot_pointer_indic, get_motor_position()); //主动设置数值
 
 }
 
@@ -73,7 +73,7 @@ void setup_scr_screen_pointer(lv_ui *ui)
     lv_timer_set_repeat_count(_indic_update_timer, -1);
 
     //刷新页面调度器
-    set_super_knod_page_status(IOT_POINTER_PAGE);
+    set_super_knob_page_status(IOT_POINTER_PAGE);
 
     /*Create an animation to set the value*/
     // lv_anim_t a;

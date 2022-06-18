@@ -4,11 +4,11 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-04 23:41:54
+ * @LastEditTime: 2022-06-18 23:25:49
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 
 LV_IMG_DECLARE(motor_img);      //图片初始化
 LV_IMG_DECLARE(instrument_img); //图片初始化
@@ -146,6 +146,10 @@ void setup_scr_screen_welcome(lv_ui *ui)
     /* create slider_prg */
     static lv_style_t style_bg;
     static lv_style_t style_indic;
+    static lv_style_t style_text;
+    lv_style_init(&style_text);
+    lv_style_set_text_opa(&style_text, 255);
+    lv_style_set_text_color(&style_text, lv_color_black());
 
     lv_style_init(&style_bg);
     lv_style_set_border_color(&style_bg, lv_palette_main(LV_PALETTE_BLUE));
@@ -159,6 +163,13 @@ void setup_scr_screen_welcome(lv_ui *ui)
     lv_style_set_bg_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
     lv_style_set_radius(&style_indic, 3);
 
+    lv_obj_t* label = lv_label_create(ui->screen_welcome);
+    LV_FONT_DECLARE(lv_font_super_knob_30); //加载字体
+    lv_obj_set_style_text_font(label, &lv_font_super_knob_30, 0);
+    lv_label_set_text(label, "Super Knob!");
+    lv_obj_add_style(label, &style_text, 0);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
     ui->power_on_bar = lv_bar_create(ui->screen_welcome);
     lv_obj_remove_style_all(ui->power_on_bar);  /*To have a clean start*/
     lv_obj_add_style(ui->power_on_bar, &style_bg, 0);
@@ -167,26 +178,26 @@ void setup_scr_screen_welcome(lv_ui *ui)
     lv_obj_center(ui->power_on_bar);
     lv_bar_set_value(ui->power_on_bar, 0, LV_ANIM_ON);
     lv_obj_add_flag(ui->power_on_bar, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_align(ui->power_on_bar, LV_ALIGN_CENTER, 0, 20);
+    lv_obj_align(ui->power_on_bar, LV_ALIGN_CENTER, 0, 30);
 
     /* create 3 objects */
     obj1 = lv_img_create(ui->screen_welcome);
     lv_img_set_src(obj1, &motor_img);
     lv_obj_set_size(obj1, obj_width, obj_height);
     lv_obj_add_flag(obj1, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_align(obj1, LV_ALIGN_CENTER, -60, -20);
+    lv_obj_align(obj1, LV_ALIGN_CENTER, -60, -40);
 
     obj2 = lv_img_create(ui->screen_welcome);
     lv_img_set_src(obj2, &instrument_img);
     lv_obj_set_size(obj2, obj_width, obj_height);
     lv_obj_add_flag(obj2, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_align(obj2, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_align(obj2, LV_ALIGN_CENTER, 0, -40);
 
     obj3 = lv_img_create(ui->screen_welcome);
     lv_img_set_src(obj3, &chip_img);
     lv_obj_set_size(obj3, obj_width, obj_height);
     lv_obj_add_flag(obj3, LV_OBJ_FLAG_IGNORE_LAYOUT);
-    lv_obj_align(obj3, LV_ALIGN_CENTER, 60, -20);
+    lv_obj_align(obj3, LV_ALIGN_CENTER, 60, -40);
 
     anim_timeline_create();
 
@@ -196,5 +207,5 @@ void setup_scr_screen_welcome(lv_ui *ui)
     lv_timer_set_repeat_count(_welcom_timer, 1);
 
     //刷新页面调度器
-    set_super_knod_page_status(WELCOME_PAGE);
+    set_super_knob_page_status(WELCOME_PAGE);
 }

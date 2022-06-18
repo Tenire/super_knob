@@ -4,11 +4,11 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 22:56:28
+ * @LastEditTime: 2022-06-18 23:26:00
  */
 #include "lvgl.h"
 #include <stdio.h>
-#include "gui_super_knod.h"
+#include "gui_super_knob.h"
 #include <motor.h>
 #include <display.h>
 
@@ -43,5 +43,5 @@ void setup_scr_screen_tomato_clock(lv_ui *ui)
 
 
     //刷新页面调度器
-    set_super_knod_page_status(IOT_COMPUTER_PAGE);
+    set_super_knob_page_status(IOT_COMPUTER_PAGE);
 }

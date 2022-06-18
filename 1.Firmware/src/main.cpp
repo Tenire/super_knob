@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 18:00:00
+ * @LastEditTime: 2022-06-18 23:25:53
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -21,8 +21,8 @@ TaskHandle_t Task_lvgl_Handle; //lvgl 任务
 
 QueueHandle_t motor_msg_Queue;  //lvgl 接收消息队列
 QueueHandle_t motor_rcv_Queue;  //motor 接收消息队列
-_knod_message LVGL_MSG;
-_knod_message MOTOR_MSG;
+_knob_message LVGL_MSG;
+_knob_message MOTOR_MSG;
 
 
 void setup()
@@ -33,8 +33,8 @@ void setup()
     #ifdef ENABLE_BLE_KEY_BOARD
     ble_keyboard_init();
     #endif
-    motor_msg_Queue = xQueueCreate(10, sizeof(struct _knod_message *));
-    motor_rcv_Queue = xQueueCreate(10, sizeof(struct _knod_message *));
+    motor_msg_Queue = xQueueCreate(10, sizeof(struct _knob_message *));
+    motor_rcv_Queue = xQueueCreate(10, sizeof(struct _knob_message *));
 
     xTaskCreatePinnedToCore(
         Task_foc, "Task_foc", 4096, NULL, 2, &Task_foc_Handle, ESP32_RUNNING_CORE);
