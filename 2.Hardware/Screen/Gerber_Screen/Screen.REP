@@ -2,10 +2,52 @@
 FileName = Screen.GBR
 AutoAperture = True
 *************************************************************
-Generating : Top Paste
-      File : Screen.GTP
+Generating : Keep-Out Layer
+      File : Screen.GKO
 
-    Adding Layer      : Top Paste
+    Adding Layer      : Keep-Out Layer
+
+
+Used DCodes :
+    D25
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 8
+      File : Screen.GM8
+
+    Adding Layer      : Mechanical 8
+
+
+Used DCodes :
+    D25
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 1
+      File : Screen.GM1
+
+    Adding Layer      : Mechanical 1
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : Screen.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+*************************************************************
+
+*************************************************************
+Generating : Top Pad Master
+      File : Screen.GPT
 
     Adding Layer      : Top Layer
 
@@ -17,6 +59,41 @@ Used DCodes :
 *************************************************************
 
 *************************************************************
+Generating : Bottom Solder
+      File : Screen.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D15
+    D22
+    D23
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : Screen.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+    D15
+*************************************************************
+
+*************************************************************
 Generating : Bottom Overlay
       File : Screen.GBO
 
@@ -25,6 +102,20 @@ Generating : Bottom Overlay
 
 Used DCodes :
     D24
+*************************************************************
+
+*************************************************************
+Generating : Bottom Pad Master
+      File : Screen.GPB
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D20
+    D21
 *************************************************************
 
 *************************************************************
@@ -45,43 +136,10 @@ Used DCodes :
 *************************************************************
 
 *************************************************************
-Generating : Mechanical 8
-      File : Screen.GM8
+Generating : Bottom Paste
+      File : Screen.GBP
 
-    Adding Layer      : Mechanical 8
-
-
-Used DCodes :
-    D25
-*************************************************************
-
-*************************************************************
-Generating : Top Overlay
-      File : Screen.GTO
-
-    Adding Layer      : Top Overlay
-
-
-Used DCodes :
-    D10
-    D11
-*************************************************************
-
-*************************************************************
-Generating : Mechanical 1
-      File : Screen.GM1
-
-    Adding Layer      : Mechanical 1
-
-
-Used DCodes :
-*************************************************************
-
-*************************************************************
-Generating : Bottom Solder
-      File : Screen.GBS
-
-    Adding Layer      : Bottom Solder
+    Adding Layer      : Bottom Paste
 
     Adding Layer      : Bottom Layer
 
@@ -89,10 +147,8 @@ Generating : Bottom Solder
 
 
 Used DCodes :
-    D13
-    D15
-    D22
-    D23
+    D20
+    D21
 *************************************************************
 
 *************************************************************
@@ -123,51 +179,10 @@ Used DCodes :
 *************************************************************
 
 *************************************************************
-Generating : Mechanical 2
-      File : Screen.GM2
+Generating : Top Paste
+      File : Screen.GTP
 
-    Adding Layer      : Mechanical 2
-
-
-Used DCodes :
-*************************************************************
-
-*************************************************************
-Generating : Bottom Paste
-      File : Screen.GBP
-
-    Adding Layer      : Bottom Paste
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D20
-    D21
-*************************************************************
-
-*************************************************************
-Generating : Top Solder
-      File : Screen.GTS
-
-    Adding Layer      : Top Solder
-
-    Adding Layer      : Top Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D13
-    D14
-    D15
-*************************************************************
-
-*************************************************************
-Generating : Top Pad Master
-      File : Screen.GPT
+    Adding Layer      : Top Paste
 
     Adding Layer      : Top Layer
 
@@ -193,19 +208,5 @@ Used DCodes :
     D17
     D18
     D19
-*************************************************************
-
-*************************************************************
-Generating : Bottom Pad Master
-      File : Screen.GPB
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D20
-    D21
 *************************************************************
 
