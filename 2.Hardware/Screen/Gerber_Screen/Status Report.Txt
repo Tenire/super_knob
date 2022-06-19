@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Screen.PrjPcb]
+   Generated File[Screen.TXT]
+   Generated File[Screen.LDP]
+   Generated File[Screen.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 23:11:45 On 2022/6/19
