@@ -1,0 +1,3 @@
+[submodule "4.Super Knob Submodules/Submodule_esp8266"]
+	path = 4.Super Knob Submodules/Submodule_esp8266
+	url = https://gitee.com/wenzhengclub/super_knob_tuya_esp8266.git
