@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:27:59
+ * @LastEditTime: 2022-07-01 23:43:42
  */
 /*
  * Copyright 2022 NXP
@@ -62,6 +62,10 @@ void setup_scr_screen_tomato_clock(lv_ui *ui);
 
 void set_super_knob_page_status(SUPER_KNOB_PAGE_NUM now_page);
 SUPER_KNOB_PAGE_NUM get_super_knob_page_status(void);
+//从上至下动态加载控件
+void lv_obj_add_anim_down(lv_obj_t *obj, uint32_t delay);
+//从下至上动态加载控件
+void lv_obj_add_anim_up(lv_obj_t *obj, uint32_t delay);
 
 
 /*

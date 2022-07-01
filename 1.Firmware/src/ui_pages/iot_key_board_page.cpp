@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:26:27
+ * @LastEditTime: 2022-07-02 00:21:14
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -163,11 +163,13 @@ void setup_scr_screen_player(lv_ui *ui)
     lv_obj_add_style(exit_btn, &style, 0);
     lv_obj_add_style(exit_btn, &style_pr, LV_STATE_PRESSED);
     lv_obj_align(exit_btn, LV_ALIGN_TOP_MID, 0, 10);
+    lv_obj_fade_in(exit_btn, 500, 500);
 
 
     player_img_center= lv_img_create(ui->screen_iot_player);
     lv_img_set_src(player_img_center, &music_close_img);
     lv_obj_center(player_img_center);
+    lv_obj_add_anim_down(player_img_center, 500);
     //lv_group_add_obj(super_knob_ui.defult_group, img_1);
 
     //-------------------------button_last----------------------------------//
@@ -183,6 +185,7 @@ void setup_scr_screen_player(lv_ui *ui)
     lv_obj_add_style(btn_last, &style_none_opa_btn, 0);
     lv_obj_add_style(btn_last, &style_pr, LV_STATE_PRESSED);
     lv_obj_align(btn_last, LV_ALIGN_BOTTOM_MID, -55, -23);
+    lv_obj_fade_in(btn_last, 500, 500);
 
     //-------------------------button_control----------------------------------//
     lv_obj_t * btn_control = lv_btn_create(ui->screen_iot_player);
@@ -194,6 +197,7 @@ void setup_scr_screen_player(lv_ui *ui)
     lv_img_set_src(ui->screen_iot_player_play_img, &music_open_img);
     lv_obj_center(ui->screen_iot_player_play_img);
     lv_obj_align(btn_control, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lv_obj_fade_in(btn_control, 500, 500);
 
     //-------------------------button_next----------------------------------//
     lv_obj_t * btn_next = lv_btn_create(ui->screen_iot_player);
@@ -208,6 +212,7 @@ void setup_scr_screen_player(lv_ui *ui)
     lv_obj_add_style(btn_next, &style_none_opa_btn, 0);
     lv_obj_add_style(btn_next, &style_pr, LV_STATE_PRESSED);
     lv_obj_align(btn_next, LV_ALIGN_BOTTOM_MID, 55, -23);
+    lv_obj_fade_in(btn_next, 500, 500);
 
     //设计播放音乐的动画
 
@@ -226,7 +231,7 @@ void setup_scr_screen_player(lv_ui *ui)
     lv_anim_set_values(&player_anim, 0, 10);
     //lv_anim_start(&player_anim);
     
-
+    
 
     //刷新页面调度器
     set_super_knob_page_status(IOT_COMPUTER_PAGE);
