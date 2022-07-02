@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:23
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-01 23:42:39
+ * @LastEditTime: 2022-07-02 10:40:22
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -58,6 +58,40 @@ void lv_obj_add_anim_up(lv_obj_t *obj, uint32_t delay)
         lv_anim_set_delay(&a, delay);
         lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_y);
         lv_anim_set_values(&a, lv_obj_get_y(obj) + 60, lv_obj_get_y(obj));
+        lv_anim_start(&a);
+        lv_obj_fade_in(obj, LV_DEMO_PRINTER_ANIM_TIME - 50, delay); //动画淡入
+    }
+}
+
+//从左至右动态加载控件
+void lv_obj_add_anim_right(lv_obj_t *obj, uint32_t delay)
+{
+    if (obj != lv_scr_act())
+    {
+        lv_anim_t a;
+        lv_anim_init(&a);
+        lv_anim_set_var(&a, obj);
+        lv_anim_set_time(&a, LV_DEMO_PRINTER_ANIM_TIME);
+        lv_anim_set_delay(&a, delay);
+        lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_x);
+        lv_anim_set_values(&a, lv_obj_get_x(obj) - 60, lv_obj_get_x(obj));
+        lv_anim_start(&a);
+        lv_obj_fade_in(obj, LV_DEMO_PRINTER_ANIM_TIME - 50, delay); //动画淡入
+    }
+}
+
+//从右至左动态加载控件
+void lv_obj_add_anim_left(lv_obj_t *obj, uint32_t delay)
+{
+    if (obj != lv_scr_act())
+    {
+        lv_anim_t a;
+        lv_anim_init(&a);
+        lv_anim_set_var(&a, obj);
+        lv_anim_set_time(&a, LV_DEMO_PRINTER_ANIM_TIME);
+        lv_anim_set_delay(&a, delay);
+        lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_x);
+        lv_anim_set_values(&a, lv_obj_get_x(obj) + 60, lv_obj_get_x(obj));
         lv_anim_start(&a);
         lv_obj_fade_in(obj, LV_DEMO_PRINTER_ANIM_TIME - 50, delay); //动画淡入
     }

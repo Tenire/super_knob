@@ -4,21 +4,22 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:25:57
+ * @LastEditTime: 2022-07-02 11:34:54
  */
 #include <motor.h>
 #include <main.h>
 #include <SimpleFOC.h>
+#include <display.h>
 
 static KnobConfig super_knob_configs[] = {
     {
         0,
         0,
-        10 * PI / 180,       
+        10 * PI / 180,
         0,
         1,
         1.1,
-        "Unbounded\nNo detents",  //无限制  不制动
+        "Unbounded\nNo detents", //无限制  不制动
     },
     {
         32,
@@ -47,18 +48,16 @@ static KnobConfig super_knob_configs[] = {
         1.1,
         "Fine values\nNo detents", //任意运动的控制  无阻尼
     },
-        {
-        2,                       //可以运动的个数
+    {
+        2, //可以运动的个数
         0,
-        60 * PI / 180,           //每一步60度
-        1,                       //制动强度为1
+        60 * PI / 180, //每一步60度
+        1,             //制动强度为1
         1,
-        0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
+        0.55,                    // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
         "On/off\nStrong detent", //模拟开关  强制动
     },
 };
-
-
 
 //死区制动百分率
 static const float DEAD_ZONE_DETENT_PERCENT = 0.2;
@@ -203,7 +202,7 @@ void Task_foc(void *pvParameters)
     motor.PID_velocity.D = 0.0002;
     motor.LPF_velocity.Tf = 0.02; //速度低通滤波
     motor.P_angle.P = 20;         //角度P控制器
-    motor.velocity_limit = 5;    //位置控制的最大速度
+    motor.velocity_limit = 5;     //位置控制的最大速度
 
     //电机参数监控输出串口
     // motor.useMonitoring(Serial);
@@ -218,7 +217,7 @@ void Task_foc(void *pvParameters)
     motor.controller = MotionControlType::torque;
     //定义电机ID
     // command.add('M', onMotor, (char *)"motor");
-    //motor.move(0);
+    // motor.move(0);
     motor.loopFOC();
 
     update_motor_status(MOTOR_INIT_END);
@@ -240,32 +239,36 @@ void Task_foc(void *pvParameters)
         {
             Serial.print("motor_rcv_Queue --->");
             Serial.println(lvgl_message->ucMessageID);
-            switch(lvgl_message->ucMessageID){
-                case 0:{
-                    //上次的相对位置
-                    current_detent_center = motor.shaft_angle;
-                    //motor.PID_velocity.limit = 10;
+            switch (lvgl_message->ucMessageID)
+            {
+            case CHECKOUT_PAGE:
+            {
+                //上次的相对位置
+                current_detent_center = motor.shaft_angle;
+                // motor.PID_velocity.limit = 10;
 
-                    const float derivative_lower_strength = motor_config.detent_strength_unit * 0.08;
-                    const float derivative_upper_strength = motor_config.detent_strength_unit * 0.02;
-                    const float derivative_position_width_lower = radians(3);
-                    const float derivative_position_width_upper = radians(8);
-                    const float raw = derivative_lower_strength + (derivative_upper_strength - derivative_lower_strength) / (derivative_position_width_upper - derivative_position_width_lower) * (motor_config.position_width_radians - derivative_position_width_lower);
-                    // CLAMP可以将随机变化的值限制在一个给定的区间[min,max]内
-                    motor.PID_velocity.D = CLAMP(
-                        raw,
-                        min(derivative_lower_strength, derivative_upper_strength),
-                        max(derivative_lower_strength, derivative_upper_strength));
+                const float derivative_lower_strength = motor_config.detent_strength_unit * 0.08;
+                const float derivative_upper_strength = motor_config.detent_strength_unit * 0.02;
+                const float derivative_position_width_lower = radians(3);
+                const float derivative_position_width_upper = radians(8);
+                const float raw = derivative_lower_strength + (derivative_upper_strength - derivative_lower_strength) / (derivative_position_width_upper - derivative_position_width_lower) * (motor_config.position_width_radians - derivative_position_width_lower);
+                // CLAMP可以将随机变化的值限制在一个给定的区间[min,max]内
+                motor.PID_velocity.D = CLAMP(
+                    raw,
+                    min(derivative_lower_strength, derivative_upper_strength),
+                    max(derivative_lower_strength, derivative_upper_strength));
 
-                    //存在页面切换 就震动一下
-                    motor_shake(2, 2);
-                }
+                //存在页面切换 就震动一下
+                motor_shake(2, 2);
+            }
+            break;
+            case BUTTON_CLICK:
+                motor_shake(2, 2);
                 break;
-                default:
+            default:
                 break;
             }
         }
-
 
         idle_check_velocity_ewma = motor.shaft_velocity * IDLE_VELOCITY_EWMA_ALPHA + idle_check_velocity_ewma * (1 - IDLE_VELOCITY_EWMA_ALPHA);
         if (fabsf(idle_check_velocity_ewma) > IDLE_VELOCITY_RAD_PER_SEC)
@@ -284,7 +287,7 @@ void Task_foc(void *pvParameters)
         // If we are not moving and we're close to the center (but not exactly there), slowly adjust the centerpoint to match the current position
         if (last_idle_start > 0 && millis() - last_idle_start > IDLE_CORRECTION_DELAY_MILLIS && fabsf(motor.shaft_angle - current_detent_center) < IDLE_CORRECTION_MAX_ANGLE_RAD)
         {
-            //Serial.println("slowly adjust the centerpoint to match the current position......");
+            // Serial.println("slowly adjust the centerpoint to match the current position......");
             current_detent_center = motor.shaft_angle * IDLE_CORRECTION_RATE_ALPHA + current_detent_center * (1 - IDLE_CORRECTION_RATE_ALPHA);
         }
 
@@ -330,7 +333,7 @@ void Task_foc(void *pvParameters)
             motor.move(torque);
         }
 
-        //Serial.println(motor_config.position);
+        // Serial.println(motor_config.position);
         vTaskDelay(1);
     }
 }

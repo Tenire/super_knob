@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 00:04:33
+ * @LastEditTime: 2022-07-02 12:12:31
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -15,21 +15,31 @@
 
 
 TimerHandle_t tomato_tmr;
+TimerHandle_t alarm_clock;
+
 LV_IMG_DECLARE(music_close_img); //图片初始化
 LV_IMG_DECLARE(music_exit_img);
+LV_IMG_DECLARE(work_img);
+LV_IMG_DECLARE(rest_img);
 
 lv_obj_t *tomato_time_label;
 static lv_obj_t *bg_top;
 static lv_obj_t *bg_bottom;
 int tomato_hour_time = 0;
+static int tomato_second_time = 60;
+static int tomato_minute_time = 24;
 
 //移除全部控件
 static void lv_demo_printer_anim_out_all(lv_obj_t *obj, uint32_t delay);
 
+void reset_time_cnt(int minute, int second)
+{
+    tomato_second_time = second;
+    tomato_minute_time = minute;
+}
+
 void update_tomato_time(void)
 {
-    static int tomato_second_time = 60;
-    static int tomato_minute_time = 24;
     tomato_second_time--;
 
     char *print_buff = (char *)malloc(6);
@@ -64,6 +74,9 @@ void update_tomato_time(void)
     if (tomato_minute_time == -1)
     {
         xTimerStop(tomato_tmr, 0);
+
+        if(pdFALSE == xTimerIsTimerActive(alarm_clock))
+        xTimerStart(alarm_clock, 0); //开启震动定时器
     }
 }
 
@@ -79,17 +92,65 @@ void tomato_timeout(TimerHandle_t pxTimer)
     update_tomato_time();
 }
 
+void alarm_clock_timeout(TimerHandle_t pxTimer)
+{
+    int32_t lArrayIndex;
+    configASSERT(pxTimer);
+    // 读取超时定时器的ID
+    // lArrayIndex = (int32_t)pvTimerGetTimerID(pxTimer);
+    // Serial.print("[E]network_connect_timeout----");
+    // Serial.println(lArrayIndex);
+    update_page_status(BUTTON_CLICK);
+}
+
 static void exit_btn_event_handler(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED)
     {
+        if(xTimerIsTimerActive(tomato_tmr))
         xTimerStop(tomato_tmr, 0);
+        if(xTimerIsTimerActive(alarm_clock))
+        xTimerStop(alarm_clock, 0); //关闭闹钟定时器
+        
+        reset_time_cnt(24, 60);
         setup_scr_screen_iot_main(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 100, true);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         update_motor_config(1);
-        update_page_status(0);
+        update_page_status(CHECKOUT_PAGE);
+    }
+    else if (code == LV_EVENT_VALUE_CHANGED)
+    {
+    }
+}
+
+static void work_btn_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CLICKED)
+    {
+        update_page_status(BUTTON_CLICK);
+        if(pdFALSE == xTimerIsTimerActive(tomato_tmr))
+        xTimerStart(tomato_tmr, 0); //开启倒计时定时器
+        reset_time_cnt(24, 60);
+
+    }
+    else if (code == LV_EVENT_VALUE_CHANGED)
+    {
+    }
+}
+
+static void rest_btn_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CLICKED)
+    {
+        update_page_status(BUTTON_CLICK);
+        if(pdFALSE == xTimerIsTimerActive(tomato_tmr))
+        xTimerStart(tomato_tmr, 0); //开启倒计时定时器
+        reset_time_cnt(1, 60);
+
     }
     else if (code == LV_EVENT_VALUE_CHANGED)
     {
@@ -97,8 +158,15 @@ static void exit_btn_event_handler(lv_event_t *e)
 }
 
 
+
 void setup_scr_screen_tomato_clock(lv_ui *ui)
 {
+    static lv_style_t style_btn;
+    lv_style_init(&style_btn);
+    lv_style_set_bg_opa(&style_btn, 0); //设置背景透明
+    lv_style_set_radius(&style_btn, 15);
+
+
     static lv_style_t style_text;
     lv_style_init(&style_text);
     lv_style_set_text_opa(&style_text, 255);
@@ -156,6 +224,38 @@ void setup_scr_screen_tomato_clock(lv_ui *ui)
     lv_obj_add_style(working_bg, &style_working_bg, 0);
     lv_obj_fade_in(working_bg, 500, 500);
 
+
+    tomato_time_label = lv_label_create(ui->screen_iot_tomato_clock);
+    //lv_label_set_long_mode(tomato_time_label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
+    LV_FONT_DECLARE(lv_font_lcd_font_60);                          //加载字体
+    lv_obj_set_style_text_font(tomato_time_label, &lv_font_lcd_font_60, 0);
+    lv_label_set_text(tomato_time_label, "25:00");
+    lv_obj_align(tomato_time_label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_add_anim_down(tomato_time_label,600);
+
+
+    lv_obj_t *working_btn = lv_btn_create(ui->screen_iot_tomato_clock);
+    lv_obj_add_event_cb(working_btn, work_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_obj_set_size(working_btn, 120, 48);
+    lv_obj_t *img_working = lv_img_create(working_btn);
+    lv_img_set_src(img_working, &work_img);
+    lv_obj_align(img_working, LV_ALIGN_RIGHT_MID, 0, 0);
+
+    lv_obj_add_style(working_btn, &style_btn, 0);
+    lv_obj_align(working_btn, LV_ALIGN_BOTTOM_LEFT, 0, -10);
+    lv_obj_add_anim_right(working_btn, 1000);
+
+    lv_obj_t *rest_btn = lv_btn_create(ui->screen_iot_tomato_clock);
+    lv_obj_add_event_cb(rest_btn, rest_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_obj_set_size(rest_btn, 120, 48);
+    lv_obj_t *img_rest = lv_img_create(rest_btn);
+    lv_img_set_src(img_rest, &rest_img);
+    lv_obj_align(img_rest, LV_ALIGN_LEFT_MID, 0, 0);
+
+    lv_obj_add_style(rest_btn, &style_btn, 0);
+    lv_obj_align(rest_btn, LV_ALIGN_BOTTOM_RIGHT, 0, -10);
+    lv_obj_add_anim_left(rest_btn, 1000);
+
     lv_obj_t *exit_btn = lv_btn_create(ui->screen_iot_tomato_clock);
     lv_obj_add_event_cb(exit_btn, exit_btn_event_handler, LV_EVENT_ALL, NULL);
     lv_obj_set_style_radius(exit_btn, LV_RADIUS_CIRCLE, 0); //设置为圆形
@@ -168,19 +268,10 @@ void setup_scr_screen_tomato_clock(lv_ui *ui)
     lv_obj_add_style(exit_btn, &style_pr, LV_STATE_PRESSED);
     lv_obj_align(exit_btn, LV_ALIGN_TOP_MID, 0, 10);
 
-    
-
-    tomato_time_label = lv_label_create(ui->screen_iot_tomato_clock);
-    //lv_label_set_long_mode(tomato_time_label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    LV_FONT_DECLARE(lv_font_lcd_font_60);                          //加载字体
-    lv_obj_set_style_text_font(tomato_time_label, &lv_font_lcd_font_60, 0);
-    lv_label_set_text(tomato_time_label, "25:00");
-    lv_obj_align(tomato_time_label, LV_ALIGN_CENTER, 0, 0);
-    
-    lv_obj_add_anim_down(tomato_time_label,600);
 
     //刷新页面调度器
     set_super_knob_page_status(IOT_COMPUTER_PAGE);
+    //创建相关定时器
     tomato_tmr = xTimerCreate("tomato_Timer", (1000), pdTRUE, (void *)0, tomato_timeout);
-    xTimerStart(tomato_tmr, 0); //开启倒计时定时器
+    alarm_clock = xTimerCreate("alarm_clock", (1000), pdTRUE, (void *)0, alarm_clock_timeout);
 }

@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 00:21:14
+ * @LastEditTime: 2022-07-02 11:42:48
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -33,7 +33,7 @@ static void exit_btn_event_handler(lv_event_t * e)
         lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         update_motor_config(1);
-        update_page_status(0);
+        update_page_status(CHECKOUT_PAGE);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
 
@@ -45,6 +45,7 @@ static void player_btn_control_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     static int play_cnt = 0;
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(BUTTON_CLICK);
         keyboard_enable_player();
         if (play_cnt){
             lv_anim_del(player_img_center, NULL);
@@ -67,6 +68,7 @@ static void player_btn_next_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(BUTTON_CLICK);
         keyboard_player_next();
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
@@ -79,6 +81,7 @@ static void player_btn_last_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(BUTTON_CLICK);
         keyboard_player_next();
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {

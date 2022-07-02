@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-01 23:43:42
+ * @LastEditTime: 2022-07-02 11:28:31
  */
 /*
  * Copyright 2022 NXP
@@ -66,6 +66,10 @@ SUPER_KNOB_PAGE_NUM get_super_knob_page_status(void);
 void lv_obj_add_anim_down(lv_obj_t *obj, uint32_t delay);
 //从下至上动态加载控件
 void lv_obj_add_anim_up(lv_obj_t *obj, uint32_t delay);
+//从左至右动态加载控件
+void lv_obj_add_anim_right(lv_obj_t *obj, uint32_t delay);
+//从右至左动态加载控件
+void lv_obj_add_anim_left(lv_obj_t *obj, uint32_t delay);
 
 
 /*

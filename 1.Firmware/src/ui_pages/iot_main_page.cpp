@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:38:02
+ * @LastEditTime: 2022-07-02 11:38:39
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -120,7 +120,7 @@ static void lamp_btn_event_handler(lv_event_t * e)
         setup_scr_screen_pointer(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
         update_motor_config(2);
-        update_page_status(0);
+        update_page_status(CHECKOUT_PAGE);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
@@ -132,6 +132,7 @@ static void sensor_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_iot_sensor(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
@@ -145,6 +146,7 @@ static void sensor_computer_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_player(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_player, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
@@ -160,6 +162,7 @@ static void fan_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_tomato_clock(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_tomato_clock, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);
@@ -175,6 +178,7 @@ static void tomato_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
         set_super_knob_page_status(SUPER_PAGE_BUSY);
         setup_scr_screen_tomato_clock(&super_knob_ui);
         lv_scr_load_anim(super_knob_ui.screen_iot_tomato_clock, LV_SCR_LOAD_ANIM_FADE_ON, 500, 100, true);

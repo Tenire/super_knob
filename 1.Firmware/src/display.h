@@ -7,8 +7,15 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:58
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-03 23:12:21
+ * @LastEditTime: 2022-07-02 11:32:17
  */
+
+typedef enum
+{
+    CHECKOUT_PAGE,
+    BUTTON_CLICK
+
+} DISPLAY_STATUS_E;
 
 
 

@@ -10,7 +10,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:27:37
+ * @LastEditTime: 2022-07-02 11:21:26
  */
 
 TimerHandle_t poweron_tmr;
@@ -79,7 +79,7 @@ void page_status_check(void)
             lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
-            update_page_status(0);
+            update_page_status(CHECKOUT_PAGE);
         }
         break;
     default:
