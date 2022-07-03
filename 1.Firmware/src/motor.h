@@ -4,14 +4,14 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 11:31:56
+ * @LastEditTime: 2022-07-03 14:42:06
  */
 #pragma once
 #include <Arduino.h>
 
 #define LVGL_RUNNING_CORE 0 //内核选择   LVGL用核心0  其他用核心1
 #define ESP32_RUNNING_CORE 1 //内核选择   LVGL用核心0  其他用核心1
-#define LED_PIN 2
+#define LED_PIN 11
 #define pi 3.1415926
 #define init_smooth 1000 // 该值越大，初始化越慢。以防受到干扰。
 #define volt_limit 8.0000

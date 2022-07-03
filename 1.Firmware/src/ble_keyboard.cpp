@@ -4,12 +4,12 @@
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-11 12:49:20
+ * @LastEditTime: 2022-07-03 23:18:23
  */
 #include <main.h>
 #include <BleKeyboard.h>
 #include <ble_keyboard.h>
-BleKeyboard bleKeyboard("Super Knord","Espressif",100);
+BleKeyboard bleKeyboard("Super Knord pro","Espressif",100);
 
 
 void ble_keyboard_init(void)

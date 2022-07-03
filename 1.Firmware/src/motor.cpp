@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 11:34:54
+ * @LastEditTime: 2022-07-03 19:14:56
  */
 #include <motor.h>
 #include <main.h>
@@ -109,10 +109,10 @@ void led_blink(int n)
 {
     for (int i = 0; i < n; i++)
     {
-        digitalWrite(LED_PIN, HIGH);
-        vTaskDelay(200);
-        digitalWrite(LED_PIN, LOW);
-        vTaskDelay(100);
+        // digitalWrite(LED_PIN, HIGH);
+        // vTaskDelay(200);
+        // digitalWrite(LED_PIN, LOW);
+        // vTaskDelay(100);
     }
 }
 
@@ -205,7 +205,7 @@ void Task_foc(void *pvParameters)
     motor.velocity_limit = 5;     //位置控制的最大速度
 
     //电机参数监控输出串口
-    // motor.useMonitoring(Serial);
+    motor.useMonitoring(Serial);
     //电机初始化
     motor.init();
     //校准编码器、启用FOC
