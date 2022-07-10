@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-03 23:18:23
+ * @LastEditTime: 2022-07-06 20:36:47
  */
 #include <main.h>
 #include <BleKeyboard.h>
@@ -27,6 +27,9 @@ bool check_keyboard_connected(void)
 void keyboard_enable_player(void)
 {
     if(!check_keyboard_connected())
+    {
+        Serial.println("check_keyboard_connected error...");
+    }
     return;
     
     Serial.println("Sending Play/Pause media key...");

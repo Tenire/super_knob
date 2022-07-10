@@ -4,13 +4,14 @@
 #include <main.h>
 #include <motor.h>
 #include "ui_pages/gui_super_knob.h"
+#include <ws2812_driver.h>
 /*
  * @Descripttion:
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-03 12:07:49
+ * @LastEditTime: 2022-07-10 18:47:31
  */
 
 TimerHandle_t poweron_tmr;
@@ -41,15 +42,15 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 }
 /*-----------------------------------------------------------------------*/
 
-static bool touch_pad_press()
+static bool touch_pad_press(int gpio)
 {
     static int press_cnt = 0;
     bool ret_cnt = false;
-    if(touchRead(32) < 15){
+    if(touchRead(gpio) < 15){
         press_cnt ++;
         //10ms 消抖
         if (press_cnt > 4) {
-            if( touchRead(32) < 15){
+            if( touchRead(gpio) < 15){
                 ret_cnt = true;
                 press_cnt = -8;
             }
@@ -72,9 +73,19 @@ void page_status_check(void)
     //     break;
     // case WELCOME_PAGE:
     //     break;
+    case IOT_LIGHT_BELT_PAGE:
+        if(touch_pad_press(ESP32_TOUCH_PIN1)){
+            ext_iot_light_belt_page();
+            setup_scr_screen_iot_main(&super_knob_ui);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            set_super_knob_page_status(SUPER_PAGE_BUSY);
+            update_motor_config(1);
+            update_page_status(CHECKOUT_PAGE);
+        }
+        break;
     case IOT_SENSOR_PAGE:
     case IOT_POINTER_PAGE:
-        if(touch_pad_press()){
+        if(touch_pad_press(ESP32_TOUCH_PIN1)){
             setup_scr_screen_iot_main(&super_knob_ui);
             lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
@@ -100,15 +111,17 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
     {
         data->enc_diff++;
         old_num = get_motor_position();
+        update_ws2812_status(WS2812_ROLL, 10);
     }
     else if (now_num < old_num)
     {
         data->enc_diff--;
         old_num = get_motor_position();
+        update_ws2812_status(WS2812_ROLL, 10);
     }
-    //Serial.println(touchRead(32));
 
-    if(touch_pad_press()){
+    if(touch_pad_press(ESP32_TOUCH_PIN1)){
+        update_ws2812_status(WS2812_METEOR_OVERTURN, 10);
         data->state = LV_INDEV_STATE_PR;
     }else{
         data->state = LV_INDEV_STATE_REL;

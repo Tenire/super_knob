@@ -4,13 +4,14 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 12:12:31
+ * @LastEditTime: 2022-07-10 17:28:45
  */
 #include "lvgl.h"
 #include <stdio.h>
 #include "gui_super_knob.h"
 #include <motor.h>
 #include <display.h>
+#include <tuya_control.h>
 
 
 

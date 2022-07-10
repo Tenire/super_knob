@@ -1,9 +1,13 @@
 {
 	"folders": [
-		{
-			"name": "1.Firmware",
-			"path": "."
-		}
-	],
+        {
+            "name": "1.Firmware",
+            "path": "."
+        },
+        {
+            "name": "esp32_pico_project",
+            "path": "..\\..\\esp32_pico_project"
+        }
+    ],
     "settings": {}
 }

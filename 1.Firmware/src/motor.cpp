@@ -4,12 +4,13 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-03 19:14:56
+ * @LastEditTime: 2022-07-10 12:53:54
  */
 #include <motor.h>
 #include <main.h>
 #include <SimpleFOC.h>
 #include <display.h>
+#include <ble_keyboard.h>
 
 static KnobConfig super_knob_configs[] = {
     {
@@ -104,17 +105,6 @@ BLDCDriver3PWM driver = BLDCDriver3PWM(22, 4, 5, 21);
 // Commander command = Commander(Serial);
 // void onMotor(char *cmd) { command.motor(&motor, cmd); }
 
-// LED 闪烁
-void led_blink(int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        // digitalWrite(LED_PIN, HIGH);
-        // vTaskDelay(200);
-        // digitalWrite(LED_PIN, LOW);
-        // vTaskDelay(100);
-    }
-}
 
 //开机初始化角度至0
 void init_angle(void)
@@ -175,8 +165,6 @@ void Task_foc(void *pvParameters)
     (void)pvParameters;
 
     update_motor_status(MOTOR_INIT);
-    led_blink(1);
-
     //与I2C接线有关  设置频率
     I2Cone.begin(19, 18, 400000UL);
     //初始化传感器
@@ -211,7 +199,6 @@ void Task_foc(void *pvParameters)
     //校准编码器、启用FOC
     motor.initFOC();
     update_motor_status(MOTOR_INIT_SUCCESS);
-    led_blink(1);
     init_angle();
     //设置控制环类型：
     motor.controller = MotionControlType::torque;
@@ -219,9 +206,7 @@ void Task_foc(void *pvParameters)
     // command.add('M', onMotor, (char *)"motor");
     // motor.move(0);
     motor.loopFOC();
-
     update_motor_status(MOTOR_INIT_END);
-    led_blink(3);
 
     //当前相对位置
     float current_detent_center = 0;
