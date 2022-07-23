@@ -9,8 +9,6 @@
 #pragma once
 #include <Arduino.h>
 
-
-#define LED_PIN 11
 #define pi 3.1415926
 #define init_smooth 1000 // 该值越大，初始化越慢。以防受到干扰。
 #define volt_limit 8.0000

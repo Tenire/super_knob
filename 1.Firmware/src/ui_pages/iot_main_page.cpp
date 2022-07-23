@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-10 23:11:45
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-24 00:40:20
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -22,6 +22,7 @@ LV_IMG_DECLARE(air_cond_img);
 LV_IMG_DECLARE(sensor_img);
 LV_IMG_DECLARE(fan_img);
 LV_IMG_DECLARE(tomato_img);
+LV_IMG_DECLARE(about_img);
 
 static void scroll_event_cb(lv_event_t *e)
 {
@@ -206,6 +207,22 @@ static void sensor_leds_event_handler(lv_event_t * e)
 
 }
 
+static void about_btn_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        setup_scr_screen_about(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_about, LV_SCR_LOAD_ANIM_FADE_ON, 200, 100, true);
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_LOG_USER("Toggled");
+    }
+}
+
+
 
 void setup_scr_screen_iot_main(lv_ui *ui)
 {
@@ -260,6 +277,10 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     lv_obj_t* sensor_btn = lv_btn_create(ui->screen_iot_main);
     lv_obj_add_event_cb(sensor_btn, sensor_btn_event_handler, LV_EVENT_ALL, NULL);
     lv_set_scroll_box(sensor_btn, (void *)&sensor_img, "传感");
+
+    lv_obj_t* about_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(about_btn, about_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(about_btn, (void *)&about_img, "关于");
 
     /*Update the buttons position manually for first*/
     lv_event_send(ui->screen_iot_main, LV_EVENT_SCROLL, NULL);
