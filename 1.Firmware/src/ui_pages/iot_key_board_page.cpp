@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 11:42:48
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-23 13:38:39
  */
 #include "lvgl.h"
 #include <stdio.h>

@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-15 17:02:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-10 18:44:42
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-23 16:02:20
  */
 #pragma once
 
@@ -12,6 +12,8 @@
 
 #define ENABLE_BLE_KEY_BOARD
 #define ENABLE_WS2812_LED
+//#define ESP32C3_ENABLE
+
 
 #define LVGL_RUNNING_CORE   0            //内核选择   LVGL用核心0  其他用核心1
 #define ESP32_RUNNING_CORE  1            //内核选择   LVGL用核心0  其他用核心1

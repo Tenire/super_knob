@@ -3,25 +3,37 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-06 20:36:47
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-23 16:13:48
  */
 #include <main.h>
+#ifdef ENABLE_BLE_KEY_BOARD
 #include <BleKeyboard.h>
+#endif
 #include <ble_keyboard.h>
+
+#ifdef ENABLE_BLE_KEY_BOARD
 BleKeyboard bleKeyboard("Super Knord pro","Espressif",100);
+#endif
 
 
 void ble_keyboard_init(void)
 {
+    #ifdef ENABLE_BLE_KEY_BOARD
     bleKeyboard.begin();
     Serial.println("Starting BLE work!");
+    #endif
+
 }
 
 
 bool check_keyboard_connected(void)
 {
+    #ifdef ENABLE_BLE_KEY_BOARD
     return bleKeyboard.isConnected();
+    #else
+    return false;
+    #endif
 }
 
 void keyboard_enable_player(void)
@@ -30,10 +42,12 @@ void keyboard_enable_player(void)
     {
         Serial.println("check_keyboard_connected error...");
     }
-    return;
     
     Serial.println("Sending Play/Pause media key...");
+    #ifdef ENABLE_BLE_KEY_BOARD
     bleKeyboard.write(KEY_MEDIA_PLAY_PAUSE);
+    #endif
+    return;
 }
 
 int keyboard_player_next(void)
@@ -42,6 +56,8 @@ int keyboard_player_next(void)
     return -1;
     
     Serial.println("Sending Play/Pause media key...");
+    #ifdef ENABLE_BLE_KEY_BOARD
     bleKeyboard.write(KEY_MEDIA_NEXT_TRACK);
+    #endif
     return 0;
 }

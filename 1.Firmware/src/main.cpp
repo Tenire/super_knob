@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-09 13:43:11
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-23 16:22:40
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -16,7 +16,6 @@
 #include <ble_keyboard.h>
 #endif 
 #include <ws2812_driver.h>
-
 
 TaskHandle_t Task_foc_Handle;  //foc 任务
 TaskHandle_t Task_lvgl_Handle; //lvgl 任务
@@ -49,20 +48,27 @@ void setup()
     iot_control_Queue = xQueueCreate(10, sizeof(_ws2812_message *));
 
     WS2812_init();
-
-    xTaskCreatePinnedToCore(
-        Task_foc, "Task_foc", 4096, NULL, 2, &Task_foc_Handle, ESP32_RUNNING_CORE);
-    xTaskCreatePinnedToCore(
-        Task_lvgl, "Task_lvgl", 4096, NULL, 3, &Task_lvgl_Handle, LVGL_RUNNING_CORE);
-    xTaskCreatePinnedToCore(
-        Task_module, "Task_knob", 2048, NULL, 4, &Task_module_Handle, ESP32_RUNNING_CORE);
-    xTaskCreatePinnedToCore(
-        Task_ws2812, "Task_ws2812", 1024, NULL, 4, &Task_ws2812_Handle, ESP32_RUNNING_CORE);
+    
+    #ifdef ESP32C3_ENABLE
+        xTaskCreate(Task_foc, "Task_foc", 4096, NULL, 2, &Task_foc_Handle);
+        xTaskCreate(Task_lvgl, "Task_lvgl", 4096, NULL, 3, &Task_lvgl_Handle);
+        xTaskCreate(Task_module, "Task_knob", 2048, NULL, 4, &Task_module_Handle);
+        xTaskCreate(Task_ws2812, "Task_ws2812", 1024, NULL, 4, &Task_ws2812_Handle);
+    #else
+        xTaskCreatePinnedToCore(
+            Task_foc, "Task_foc", 4096, NULL, 2, &Task_foc_Handle, ESP32_RUNNING_CORE);
+        xTaskCreatePinnedToCore(
+            Task_lvgl, "Task_lvgl", 4096, NULL, 3, &Task_lvgl_Handle, LVGL_RUNNING_CORE);
+        xTaskCreatePinnedToCore(
+            Task_module, "Task_knob", 2048, NULL, 4, &Task_module_Handle, ESP32_RUNNING_CORE);
+        xTaskCreatePinnedToCore(
+            Task_ws2812, "Task_ws2812", 1024, NULL, 4, &Task_ws2812_Handle, ESP32_RUNNING_CORE);
+    #endif
 }
 
 void loop()
 {
-    vTaskDelay(1000);
+    delay(10000);
 }
 
 

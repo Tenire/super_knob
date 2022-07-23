@@ -10,16 +10,16 @@
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-10 18:47:31
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-23 17:02:44
  */
 
 TimerHandle_t poweron_tmr;
 static const uint16_t screenWidth = 240;
 static const uint16_t screenHeight = 240;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf_1[screenWidth * 30];
-static lv_color_t buf_2[screenWidth * 30];
+static lv_color_t buf_1[screenWidth * screenHeight/4];
+static lv_color_t buf_2[screenWidth * screenHeight/4];
 
 lv_ui super_knob_ui;
 
@@ -173,7 +173,7 @@ void Task_lvgl(void *pvParameters)
     tft.begin();        /* TFT init */
     tft.initDMA();
     tft.setRotation(0); /* Landscape orientation, flipped */
-    lv_disp_draw_buf_init(&draw_buf, buf_1, buf_2, screenWidth * 30); //开启双缓冲
+    lv_disp_draw_buf_init(&draw_buf, buf_1, buf_2, screenWidth * screenHeight/4); //开启双缓冲
     /*Initialize the display*/
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
