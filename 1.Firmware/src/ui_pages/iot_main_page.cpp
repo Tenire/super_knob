@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-24 00:40:20
+ * @LastEditTime: 2022-07-31 00:23:30
  */
 #include "lvgl.h"
 #include <stdio.h>
@@ -86,29 +86,29 @@ void lv_set_scroll_box(lv_obj_t* background_btn, void* image_src, const char * t
 
     //lv_obj_t* normal_obj = lv_btn_create(cont);
     lv_obj_set_width(background_btn, lv_pct(100));
-    lv_obj_set_height(background_btn, lv_pct(40));
+    lv_obj_set_height(background_btn, 120);
     lv_obj_add_style(background_btn, &style_btn, LV_PART_MAIN);
 
-    lv_obj_t* line1 = lv_line_create(background_btn);
-    static lv_point_t line_points[] = { {70, 5}, {70, 70} };
-    lv_line_set_points(line1, line_points, 2);
+    // lv_obj_t* line1 = lv_line_create(background_btn);
+    // static lv_point_t line_points[] = { {70, 5}, {70, 70} };
+    // lv_line_set_points(line1, line_points, 2);
 
     lv_obj_t *img1 = lv_img_create(background_btn);
     lv_img_set_src(img1, image_src);
-    lv_obj_align(img1, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_align(img1, LV_ALIGN_TOP_MID, 0, 6);
 
-    lv_obj_t* line2 = lv_line_create(background_btn);
-    static lv_point_t line_points_2[] = { {80, 40}, {180, 40} };
-    lv_line_set_points(line2, line_points_2, 2);
+    // lv_obj_t* line2 = lv_line_create(background_btn);
+    // static lv_point_t line_points_2[] = { {80, 40}, {180, 40} };
+    // lv_line_set_points(line2, line_points_2, 2);
 
     lv_obj_t* label = lv_label_create(background_btn);
     lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);     /*Circular scroll*/
-    lv_obj_set_width(label, 150);
+    lv_obj_set_width(label, 40);
     LV_FONT_DECLARE(lv_font_chinese_source_20); //加载中文字体
     lv_obj_set_style_text_font(label, &lv_font_chinese_source_20, 0);
     lv_label_set_text(label, text_buff);
     lv_obj_add_style(label, &style_text, 0);
-    lv_obj_align(label, LV_ALIGN_RIGHT_MID, 50, -5);
+    lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, -6);
 
 }
 
@@ -222,8 +222,7 @@ static void about_btn_event_handler(lv_event_t * e)
     }
 }
 
-
-
+#ifdef GC9A01_ENABLE
 void setup_scr_screen_iot_main(lv_ui *ui)
 {
     /* style */
@@ -291,5 +290,70 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     //刷新页面调度器
     set_super_knob_page_status(IOT_MAIN_PAGE);
 }
+#endif 
+
+void setup_scr_screen_iot_main(lv_ui *ui)
+{
+  static lv_style_t style_btn;
+  lv_style_init(&style_btn);
+  lv_style_set_bg_opa(&style_btn, 0); //设置背景透明
+
+    static lv_style_t style_text;
+  lv_style_init(&style_text);
+  lv_style_set_text_opa(&style_text, 255);
+  lv_style_set_text_color(&style_text, lv_color_black());
+
+    ui->screen_iot_main_boday = lv_obj_create(NULL);
+    lv_obj_set_size(ui->screen_iot_main_boday, 90, 160);
+
+    ui->screen_iot_main = lv_obj_create(ui->screen_iot_main_boday);
+    lv_obj_set_size(ui->screen_iot_main, 90, 160);
+    lv_obj_center(ui->screen_iot_main);
+
+    lv_obj_set_scroll_snap_y(ui->screen_iot_main, LV_SCROLL_SNAP_CENTER);
+    lv_obj_set_flex_flow(ui->screen_iot_main, LV_FLEX_FLOW_COLUMN);
+
+    lv_obj_add_flag(ui->screen_iot_main, LV_OBJ_FLAG_SCROLL_ONE);
+    lv_obj_set_scrollbar_mode(ui->screen_iot_main, LV_SCROLLBAR_MODE_OFF); //从不显示滚动条
+
+    lv_obj_t* lamp_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(lamp_btn, lamp_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(lamp_btn, (void *)&lamp_img, "台灯");
+
+    lv_obj_t* leds_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(leds_btn, sensor_leds_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(leds_btn, (void *)&leds_img, "灯带");
+
+    lv_obj_t* fan_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(fan_btn, fan_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(fan_btn, (void *)&fan_img, "风扇");
+
+    lv_obj_t* tomato_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(tomato_btn, tomato_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(tomato_btn, (void *)&tomato_img, "番茄");
+
+    lv_obj_t* socket_btn = lv_btn_create(ui->screen_iot_main);
+    lv_set_scroll_box(socket_btn, (void *)&socket_img, "插座");
+
+    lv_obj_t* computer_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(computer_btn, sensor_computer_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(computer_btn, (void *)&computer_img, "电脑");
+
+    lv_obj_t* air_cond_btn = lv_btn_create(ui->screen_iot_main);
+    lv_set_scroll_box(air_cond_btn, (void *)&air_cond_img, "空调");
+
+    lv_obj_t* sensor_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(sensor_btn, sensor_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(sensor_btn, (void *)&sensor_img, "传感");
+
+    lv_obj_t* about_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(about_btn, about_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(about_btn, (void *)&about_img, "关于");
 
 
+
+    lv_obj_update_snap(ui->screen_iot_main, LV_ANIM_ON);
+
+    //刷新页面调度器
+    set_super_knob_page_status(IOT_MAIN_PAGE);
+}

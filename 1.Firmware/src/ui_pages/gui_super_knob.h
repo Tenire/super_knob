@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-24 00:24:42
+ * @LastEditTime: 2022-07-31 00:05:40
  */
 /*
  * Copyright 2022 NXP
@@ -34,6 +34,7 @@ typedef struct
     lv_obj_t *screen_iot_tomato_clock;
     lv_obj_t *screen_iot_light_belt;
     lv_obj_t *screen_iot_smart_fan;
+    lv_obj_t *screen_iot_volume;
     lv_obj_t *screen_about;
     
     lv_indev_t *indev_encoder; //编码器输入
@@ -49,6 +50,7 @@ typedef enum
     IOT_COMPUTER_PAGE,
     IOT_LIGHT_BELT_PAGE,
     IOT_SMART_FAN_PAGE,
+    IOT_VOLUME_PAGE,
     ABOUT_PAGE,
 
     SUPER_PAGE_BUSY,
@@ -66,6 +68,7 @@ void setup_scr_screen_player(lv_ui *ui);
 void setup_scr_screen_tomato_clock(lv_ui *ui);
 void setup_scr_screen_light_belt(lv_ui *ui);
 void setup_scr_screen_smart_fan(lv_ui *ui);
+void setup_scr_screen_volume(lv_ui *ui);
 void setup_scr_screen_about(lv_ui *ui);
 
 void set_super_knob_page_status(SUPER_KNOB_PAGE_NUM now_page);
@@ -81,6 +84,7 @@ void lv_obj_add_anim_left(lv_obj_t *obj, uint32_t delay);
 
 
 void ext_iot_light_belt_page(void);
+void ext_iot_volume_page(void);
 
 /*
 音乐灯带插座传感风扇电脑空调番茄关于开关摇头档位风速退出

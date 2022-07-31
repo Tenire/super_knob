@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-15 17:02:59
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-24 00:13:30
+ * @LastEditTime: 2022-07-30 19:05:21
  */
 #pragma once
 
@@ -21,7 +21,7 @@
 #define ESP32_TOUCH_PIN2    32           //
 #define ESP32_TOUCH_PIN3    12           //
 #define WS2812_PIN          11           //定义选择引脚
-#define WS2812_NUM          4            //定义led个数，决定数组长度
+#define WS2812_NUM          1            //定义led个数，决定数组长度
 
 struct _knob_message
 {

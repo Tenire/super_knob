@@ -3,13 +3,14 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-18 23:26:34
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-31 00:12:41
  */
 #include "lvgl.h"
 #include <stdio.h>
 #include "gui_super_knob.h"
 #include <motor.h>
+#include <display.h>
 
 
 
@@ -74,6 +75,7 @@ void setup_scr_screen_pointer(lv_ui *ui)
 
     //刷新页面调度器
     set_super_knob_page_status(IOT_POINTER_PAGE);
+    set_encoder_read_ignore(true);
 
     /*Create an animation to set the value*/
     // lv_anim_t a;

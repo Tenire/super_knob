@@ -6,8 +6,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-22 00:19:58
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-02 11:32:17
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-07-31 00:12:05
  */
 
 typedef enum
@@ -21,3 +21,4 @@ typedef enum
 
 void update_page_status(int page_status);
 void Task_lvgl(void *pvParameters);
+void set_encoder_read_ignore(bool status);

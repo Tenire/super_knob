@@ -11,16 +11,15 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-23 18:11:33
+ * @LastEditTime: 2022-07-31 00:15:25
  */
 
 TimerHandle_t poweron_tmr;
-static const uint16_t screenWidth = 240;
-static const uint16_t screenHeight = 240;
+static const uint16_t screenWidth = 80;
+static const uint16_t screenHeight = 160;
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf_1[screenWidth * screenHeight/4];
-static lv_color_t buf_2[screenWidth * screenHeight/4];
-
+static lv_color_t buf_1[screenWidth * screenHeight];
+static bool encoder_read_ignore = false;
 lv_ui super_knob_ui;
 
 
@@ -31,11 +30,9 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
     uint32_t w = (area->x2 - area->x1 + 1);
     uint32_t h = (area->y2 - area->y1 + 1);
 
-    //开启DMA传输
     tft.startWrite();
-    tft.setSwapBytes(true);
-    tft.pushImageDMA(area->x1, area->y1, w, h,(uint16_t *)&color_p->full);
-    tft.dmaWait();
+    tft.setAddrWindow(area->x1, area->y1, w, h);
+    tft.pushColors(&color_p->full, w * h, true);
     tft.endWrite();
 
     lv_disp_flush_ready(disp);
@@ -74,7 +71,7 @@ void page_status_check(void)
     // case WELCOME_PAGE:
     //     break;
     case IOT_LIGHT_BELT_PAGE:
-        if(touch_pad_press(ESP32_TOUCH_PIN1)){
+        if(touch_pad_press(ESP32_TOUCH_PIN2)){
             ext_iot_light_belt_page();
             setup_scr_screen_iot_main(&super_knob_ui);
             lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
@@ -83,9 +80,18 @@ void page_status_check(void)
             update_page_status(CHECKOUT_PAGE);
         }
         break;
+    case IOT_VOLUME_PAGE:
+        if(touch_pad_press(ESP32_TOUCH_PIN2)){
+            ext_iot_volume_page();
+            setup_scr_screen_iot_main(&super_knob_ui);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            set_super_knob_page_status(SUPER_PAGE_BUSY);
+            update_motor_config(1);
+            update_page_status(CHECKOUT_PAGE);
+        }
     case IOT_SENSOR_PAGE:
     case IOT_POINTER_PAGE:
-        if(touch_pad_press(ESP32_TOUCH_PIN1)){
+        if(touch_pad_press(ESP32_TOUCH_PIN2)){
             setup_scr_screen_iot_main(&super_knob_ui);
             lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
@@ -97,6 +103,11 @@ void page_status_check(void)
         break;
     }
 
+}
+
+void set_encoder_read_ignore(bool status)
+{
+    encoder_read_ignore = status;
 }
 
 /*Will be called by the library to read the encoder*/
@@ -111,16 +122,18 @@ static void encoder_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
     {
         data->enc_diff++;
         old_num = get_motor_position();
+        if(!encoder_read_ignore)
         update_ws2812_status(WS2812_ROLL, 10);
     }
     else if (now_num < old_num)
     {
         data->enc_diff--;
         old_num = get_motor_position();
+        if(!encoder_read_ignore)
         update_ws2812_status(WS2812_ROLL, 10);
     }
 
-    if(touch_pad_press(ESP32_TOUCH_PIN1)){
+    if(touch_pad_press(ESP32_TOUCH_PIN2)){
         update_ws2812_status(WS2812_METEOR_OVERTURN, 10);
         data->state = LV_INDEV_STATE_PR;
     }else{
@@ -171,9 +184,8 @@ void Task_lvgl(void *pvParameters)
     lv_init();
 
     tft.begin();        /* TFT init */
-    tft.initDMA();
     tft.setRotation(0); /* Landscape orientation, flipped */
-    lv_disp_draw_buf_init(&draw_buf, buf_1, buf_2, screenWidth * screenHeight/4); //开启双缓冲
+    lv_disp_draw_buf_init(&draw_buf, buf_1, NULL, screenWidth * screenHeight); //开启双缓冲
     /*Initialize the display*/
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
