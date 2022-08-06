@@ -3,15 +3,10 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-24 01:10:50
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:04:51
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <motor.h>
-#include <display.h>
-#include <tuya_control.h>
+#include "user_app/super_knob_user_api.h"
 
 static void exit_btn_event_handler(lv_event_t *e)
 {

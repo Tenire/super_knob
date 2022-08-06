@@ -3,10 +3,10 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-06-18 18:00:49
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-10 17:44:42
+ * @LastEditors: wenzheng 565402462@qq.com
+ * @LastEditTime: 2022-08-06 15:30:25
  */
-#include <tuya_control.h>
+#include "tuya_control.h"
 #include <main.h>
 
 

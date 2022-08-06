@@ -4,18 +4,18 @@
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-23 16:22:40
+ * @LastEditTime: 2022-08-06 15:26:36
  */
 // https://docs.simplefoc.com/bldcmotor
 
 #include <main.h>
-#include <display.h>
-#include <motor.h>
-#include <tuya_control.h>
+#include <core/display.h>
+#include <core/motor.h>
+#include <driver/tuya_control.h>
 #ifdef ENABLE_BLE_KEY_BOARD
-#include <ble_keyboard.h>
+#include <driver/ble_keyboard.h>
 #endif 
-#include <ws2812_driver.h>
+#include <driver/ws2812_driver.h>
 
 TaskHandle_t Task_foc_Handle;  //foc 任务
 TaskHandle_t Task_lvgl_Handle; //lvgl 任务

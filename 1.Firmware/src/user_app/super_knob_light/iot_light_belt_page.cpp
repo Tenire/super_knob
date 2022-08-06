@@ -4,15 +4,9 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-10 17:45:21
+ * @LastEditTime: 2022-08-06 16:04:40
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <motor.h>
-#include <display.h>
-#include <tuya_control.h>
-
+#include "user_app/super_knob_user_api.h"
 
 LV_IMG_DECLARE(light_selt_img); //图片初始化
 lv_obj_t * img_center = NULL;

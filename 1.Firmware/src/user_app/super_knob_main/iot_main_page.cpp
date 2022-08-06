@@ -3,15 +3,12 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-31 00:23:30
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:12:39
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <Arduino.h>
-#include <motor.h>
-#include <display.h>
+
+#include "user_app/super_knob_user_api.h"
+
 
 //图片初始化
 LV_IMG_DECLARE(lamp_img);
@@ -117,11 +114,11 @@ static void lamp_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        set_super_knob_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_pointer(&super_knob_ui);
-        lv_scr_load_anim(super_knob_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
-        update_motor_config(2);
-        update_page_status(CHECKOUT_PAGE);
+        // set_super_knob_page_status(SUPER_PAGE_BUSY);
+        // setup_scr_screen_pointer(&super_knob_ui);
+        // lv_scr_load_anim(super_knob_ui.screen_iot_pointer, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
+        // update_motor_config(2);
+        // update_page_status(CHECKOUT_PAGE);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");
@@ -133,10 +130,10 @@ static void sensor_btn_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_CLICKED) {
-        update_page_status(CHECKOUT_PAGE);
-        set_super_knob_page_status(SUPER_PAGE_BUSY);
-        setup_scr_screen_iot_sensor(&super_knob_ui);
-        lv_scr_load_anim(super_knob_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 200, 100, true);
+        // update_page_status(CHECKOUT_PAGE);
+        // set_super_knob_page_status(SUPER_PAGE_BUSY);
+        // setup_scr_screen_iot_sensor(&super_knob_ui);
+        // lv_scr_load_anim(super_knob_ui.screen_iot_sensor, LV_SCR_LOAD_ANIM_FADE_ON, 200, 100, true);
     }
     else if(code == LV_EVENT_VALUE_CHANGED) {
         //LV_LOG_USER("Toggled");

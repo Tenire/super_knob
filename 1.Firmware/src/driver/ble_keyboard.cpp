@@ -4,13 +4,13 @@
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
  * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-30 23:59:23
+ * @LastEditTime: 2022-08-06 15:30:38
  */
 #include <main.h>
 #ifdef ENABLE_BLE_KEY_BOARD
 #include <BleKeyboard.h>
 #endif
-#include <ble_keyboard.h>
+#include "ble_keyboard.h"
 
 #ifdef ENABLE_BLE_KEY_BOARD
 BleKeyboard bleKeyboard("Super Knord pro","Espressif",100);

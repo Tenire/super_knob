@@ -3,25 +3,17 @@
  * @version:
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-30 23:30:35
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:33:10
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <motor.h>
-#include <display.h>
-#include <tuya_control.h>
+#include "user_app/super_knob_user_api.h"
 
 
 
 TimerHandle_t tomato_tmr;
 TimerHandle_t alarm_clock;
 
-LV_IMG_DECLARE(music_close_img); //图片初始化
 LV_IMG_DECLARE(music_exit_img);
-LV_IMG_DECLARE(work_img);
-LV_IMG_DECLARE(rest_img);
 LV_IMG_DECLARE(rest_img_32);
 LV_IMG_DECLARE(study_img);
 

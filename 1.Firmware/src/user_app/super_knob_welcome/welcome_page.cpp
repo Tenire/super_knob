@@ -4,11 +4,9 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-06-30 23:07:54
+ * @LastEditTime: 2022-08-06 16:06:10
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
+#include "user_app/super_knob_user_api.h"
 
 LV_IMG_DECLARE(motor_img);      //图片初始化
 LV_IMG_DECLARE(instrument_img); //图片初始化

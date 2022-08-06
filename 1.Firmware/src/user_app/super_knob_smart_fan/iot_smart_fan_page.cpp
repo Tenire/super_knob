@@ -4,15 +4,9 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-11 00:10:51
+ * @LastEditTime: 2022-08-06 16:05:52
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <motor.h>
-#include <display.h>
-#include <tuya_control.h>
-
+#include "user_app/super_knob_user_api.h"
 lv_obj_t * btn_open_label;
 LV_IMG_DECLARE(fan_big_img);       //图片初始化
 char *open_smart_fan = "{\"101\":true}";

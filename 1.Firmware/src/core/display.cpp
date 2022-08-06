@@ -1,17 +1,17 @@
-#include <display.h>
+#include "display.h"
 #include <lvgl.h>
 #include <TFT_eSPI.h>
 #include <main.h>
-#include <motor.h>
-#include "ui_pages/gui_super_knob.h"
-#include <ws2812_driver.h>
+#include "motor.h"
+#include "user_app/gui_super_knob.h"
+#include "driver/ws2812_driver.h"
 /*
  * @Descripttion:
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-31 00:15:25
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:08:34
  */
 
 TimerHandle_t poweron_tmr;

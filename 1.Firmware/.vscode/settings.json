@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "lv_demo_music.h": "c",
-        "arduino.h": "c"
+        "arduino.h": "c",
+        "gui_super_knob.h": "c"
     }
 }

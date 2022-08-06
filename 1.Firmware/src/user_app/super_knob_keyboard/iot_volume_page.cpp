@@ -3,16 +3,12 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-31 00:24:51
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:05:09
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <motor.h>
-#include <display.h>
-#include <tuya_control.h>
-#include <ble_keyboard.h>
+
+#include "user_app/super_knob_user_api.h"
+
 lv_timer_t *volume_motor_sta_timer;
 uint8_t volume_cnt=50;
 lv_obj_t * volume_bar;

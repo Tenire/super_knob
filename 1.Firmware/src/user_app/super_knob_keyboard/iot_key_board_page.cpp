@@ -3,22 +3,16 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-30 23:51:17
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 16:29:57
  */
-#include "lvgl.h"
-#include <stdio.h>
-#include "gui_super_knob.h"
-#include <ble_keyboard.h>
-#include <motor.h>
-#include <display.h>
+#include "user_app/super_knob_user_api.h"
 
 lv_obj_t * btn_control  = NULL;
 lv_obj_t * player_img_center = NULL;
 lv_anim_t player_anim;
 
 LV_IMG_DECLARE(music_close_img);       //图片初始化
-LV_IMG_DECLARE(music_exit_img); 
 LV_IMG_DECLARE(music_img);
 LV_IMG_DECLARE(music_next_img);        
 LV_IMG_DECLARE(music_last_img);
