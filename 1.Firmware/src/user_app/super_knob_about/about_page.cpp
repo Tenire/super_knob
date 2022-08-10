@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-06 16:04:51
+ * @LastEditTime: 2022-08-10 23:06:54
  */
 #include "user_app/super_knob_user_api.h"
 
@@ -27,7 +27,7 @@ static void exit_btn_event_handler(lv_event_t *e)
 void setup_scr_screen_about(lv_ui *ui)
 {
     ui->screen_about = lv_obj_create(NULL);
-    lv_obj_set_size(ui->screen_about, 240, 240);
+    lv_obj_set_size(ui->screen_about, 80, 160);
 
     static lv_style_t opa_style;
     lv_style_init(&opa_style);
@@ -42,12 +42,14 @@ void setup_scr_screen_about(lv_ui *ui)
     lv_obj_t* label = lv_label_create(ui->screen_about);
     LV_FONT_DECLARE(lv_font_super_knob_30); //加载字体
     lv_obj_set_style_text_font(label, &lv_font_super_knob_30, 0);
-    lv_label_set_text(label, "Super Knob!");
+    lv_label_set_text(label, "knob");
     lv_obj_add_style(label, &style_text, 0);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 
     lv_obj_t* www_label = lv_label_create(ui->screen_about);
-    lv_label_set_text(www_label, "www.wenzheng.club");
+    lv_label_set_long_mode(www_label, LV_LABEL_LONG_SCROLL_CIRCULAR); 
+    lv_obj_set_width(www_label, 80);
+    lv_label_set_text(www_label, "http://www.wenzheng.club");
     lv_obj_add_style(www_label, &style_text, 0);
     lv_obj_align(www_label, LV_ALIGN_CENTER, 0, 40);
 

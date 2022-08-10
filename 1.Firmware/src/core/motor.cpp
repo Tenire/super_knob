@@ -3,8 +3,8 @@
  * @version:
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-08-06 15:31:57
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-07 23:55:42
  */
 #include "motor.h"
 #include <main.h>
@@ -217,7 +217,7 @@ void Task_foc(void *pvParameters)
 
     for (;;)
     {
-        motor.loopFOC();
+        motor.loopFOC(); 
         //监听页面状态
         struct _knob_message *lvgl_message;
         if (xQueueReceive(motor_rcv_Queue, &(lvgl_message), (TickType_t)0))

@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-06 16:29:57
+ * @LastEditTime: 2022-08-10 22:24:21
  */
 #include "user_app/super_knob_user_api.h"
 
@@ -116,6 +116,7 @@ void setup_scr_screen_player(lv_ui *ui)
     ui->screen_iot_player = lv_obj_create(NULL);
     lv_obj_set_size(ui->screen_iot_player, 80, 160);
     lv_obj_center(ui->screen_iot_player);
+    lv_obj_set_scrollbar_mode(ui->screen_iot_player, LV_SCROLLBAR_MODE_OFF); //从不显示滚动条
 
     static lv_style_t opa_style;
     lv_style_init(&opa_style);

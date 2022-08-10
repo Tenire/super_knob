@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-06 16:33:10
+ * @LastEditTime: 2022-08-10 23:23:06
  */
 #include "user_app/super_knob_user_api.h"
 
@@ -144,7 +144,7 @@ static void rest_btn_event_handler(lv_event_t *e)
         update_page_status(BUTTON_CLICK);
         if(pdFALSE == xTimerIsTimerActive(tomato_tmr))
         xTimerStart(tomato_tmr, 0); //开启倒计时定时器
-        reset_time_cnt(1, 60);
+        reset_time_cnt(4, 60);
 
     }
     else if (code == LV_EVENT_VALUE_CHANGED)
@@ -322,6 +322,7 @@ void setup_scr_screen_tomato_clock(lv_ui *ui)
     ui->screen_iot_tomato_clock = lv_obj_create(NULL);
     lv_obj_set_size(ui->screen_iot_tomato_clock, 80, 160);
     lv_obj_center(ui->screen_iot_tomato_clock);
+    lv_obj_set_scrollbar_mode(ui->screen_iot_tomato_clock, LV_SCROLLBAR_MODE_OFF); //从不显示滚动条
 
     //工作UI界面
     static lv_style_t style_working_bg;

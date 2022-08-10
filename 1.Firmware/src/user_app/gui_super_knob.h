@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-27 00:05:12
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-07-31 00:05:40
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-10 22:53:39
  */
 /*
  * Copyright 2022 NXP
@@ -88,6 +88,8 @@ void ext_iot_volume_page(void);
 
 /*
 音乐灯带插座传感风扇电脑空调番茄关于开关摇头档位风速退出
+superknob
+1234567890
 */
 
 #ifdef __cplusplus

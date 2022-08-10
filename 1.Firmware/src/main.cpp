@@ -3,8 +3,8 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-05-14 23:55:57
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-08-06 15:26:36
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-06 20:57:49
  */
 // https://docs.simplefoc.com/bldcmotor
 
@@ -35,8 +35,6 @@ _iot_control_message IOT_CONTROL_MSG;
 
 void setup()
 {
-    pinMode(21, OUTPUT);
-    digitalWrite(21, HIGH);
     Serial.begin(115200);
     Serial1.begin(115200);
     #ifdef ENABLE_BLE_KEY_BOARD
