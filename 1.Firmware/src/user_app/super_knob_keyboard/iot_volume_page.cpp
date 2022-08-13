@@ -4,12 +4,12 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-06 16:05:09
+ * @LastEditTime: 2022-08-12 00:06:03
  */
 
 #include "user_app/super_knob_user_api.h"
 
-lv_timer_t *volume_motor_sta_timer;
+static lv_timer_t *volume_motor_sta_timer;
 uint8_t volume_cnt=50;
 lv_obj_t * volume_bar;
 

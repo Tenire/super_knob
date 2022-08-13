@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-06-04 14:15:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-10 23:23:06
+ * @LastEditTime: 2022-08-13 08:52:03
  */
 #include "user_app/super_knob_user_api.h"
 
@@ -128,6 +128,9 @@ static void work_btn_event_handler(lv_event_t *e)
         update_page_status(BUTTON_CLICK);
         if(pdFALSE == xTimerIsTimerActive(tomato_tmr))
         xTimerStart(tomato_tmr, 0); //开启倒计时定时器
+        if(xTimerIsTimerActive(alarm_clock))
+        xTimerStop(alarm_clock, 0); //关闭闹钟定时器
+
         reset_time_cnt(24, 60);
 
     }
@@ -144,6 +147,9 @@ static void rest_btn_event_handler(lv_event_t *e)
         update_page_status(BUTTON_CLICK);
         if(pdFALSE == xTimerIsTimerActive(tomato_tmr))
         xTimerStart(tomato_tmr, 0); //开启倒计时定时器
+        if(xTimerIsTimerActive(alarm_clock))
+        xTimerStop(alarm_clock, 0); //关闭闹钟定时器
+        
         reset_time_cnt(4, 60);
 
     }

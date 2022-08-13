@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-27 00:22:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-06 16:12:39
+ * @LastEditTime: 2022-08-11 23:13:29
  */
 
 #include "user_app/super_knob_user_api.h"
@@ -19,6 +19,7 @@ LV_IMG_DECLARE(air_cond_img);
 LV_IMG_DECLARE(sensor_img);
 LV_IMG_DECLARE(fan_img);
 LV_IMG_DECLARE(tomato_img);
+LV_IMG_DECLARE(code_img);
 LV_IMG_DECLARE(about_img);
 
 static void scroll_event_cb(lv_event_t *e)
@@ -204,6 +205,23 @@ static void sensor_leds_event_handler(lv_event_t * e)
 
 }
 
+static void developer_btn_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+
+    if(code == LV_EVENT_CLICKED) {
+        update_page_status(CHECKOUT_PAGE);
+        set_super_knob_page_status(SUPER_PAGE_BUSY);
+        update_motor_config(4);
+        setup_scr_screen_cv_developer(&super_knob_ui);
+        lv_scr_load_anim(super_knob_ui.screen_cv_developer, LV_SCR_LOAD_ANIM_FADE_ON, 200, 100, true);
+    }
+    else if(code == LV_EVENT_VALUE_CHANGED) {
+        //LV_LOG_USER("Toggled");
+    }
+
+}
+
 static void about_btn_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -328,6 +346,10 @@ void setup_scr_screen_iot_main(lv_ui *ui)
     lv_obj_t* tomato_btn = lv_btn_create(ui->screen_iot_main);
     lv_obj_add_event_cb(tomato_btn, tomato_btn_event_handler, LV_EVENT_ALL, NULL);
     lv_set_scroll_box(tomato_btn, (void *)&tomato_img, "番茄");
+
+    lv_obj_t* developer_btn = lv_btn_create(ui->screen_iot_main);
+    lv_obj_add_event_cb(developer_btn, developer_btn_event_handler, LV_EVENT_ALL, NULL);
+    lv_set_scroll_box(developer_btn, (void *)&code_img, "信仰");
 
     lv_obj_t* socket_btn = lv_btn_create(ui->screen_iot_main);
     lv_set_scroll_box(socket_btn, (void *)&socket_img, "插座");

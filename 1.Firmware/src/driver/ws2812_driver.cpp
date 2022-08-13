@@ -3,8 +3,8 @@
  * @version:
  * @Author: congsir
  * @Date: 2022-07-06 22:59:49
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-08-06 15:29:47
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-12 22:29:02
  */
 #include "ws2812_driver.h"
 #include <main.h>
@@ -14,8 +14,6 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(WS2812_NUM, WS2812_PIN, NEO_GRB + NEO_KHZ800);
 
-SemaphoreHandle_t ws2812_timeout_Semaphore;
-TimerHandle_t ws2812_delay_timer;
 TaskHandle_t Task_rainbowCycle_Handle; //ws2812 呼吸灯 任务
 
 void WS2812_init(void)
@@ -23,37 +21,6 @@ void WS2812_init(void)
     strip.begin();
     strip.setBrightness(100);
     strip.show(); 
-}
-
-void ws_delay_timeout(TimerHandle_t pxTimer)
-{
-    int32_t lArrayIndex;
-    configASSERT(pxTimer);
-    static BaseType_t xHigherPriorityTaskWoken;
-    // 读取超时定时器的ID
-    // lArrayIndex = (int32_t)pvTimerGetTimerID(pxTimer);
-    // Serial.print("[E]ws_delay_timeout----");
-    // Serial.println(lArrayIndex);
-    xSemaphoreGiveFromISR( ws2812_timeout_Semaphore, &xHigherPriorityTaskWoken);
-
-    //xTimerStop(pxTimer, 0);
-}
-
-void ws2812_smart_delay(uint32_t time_t)
-{
-    if(xTimerIsTimerActive(ws2812_delay_timer))
-    {
-        xTimerStop(ws2812_delay_timer, 0);//首先停止当前的定时器
-        xTimerChangePeriod(ws2812_delay_timer, time_t, 0);//修改定时器周期
-        xTimerReset(ws2812_delay_timer, 0);
-    }else{
-        xTimerChangePeriod(ws2812_delay_timer, time_t, 0);
-        xTimerStart(ws2812_delay_timer, 0);
-    }
-
-
-    //阻塞等待超时信号量
-    xSemaphoreTake(ws2812_timeout_Semaphore, portMAX_DELAY);
 }
 
 void ws2812_colorWipe(uint32_t c, uint8_t wait)
@@ -265,19 +232,12 @@ void Task_rainbowCycle(void *pvParameters)
 void Task_ws2812(void *pvParameters)
 {
     int ws2812_status = WS2812_NORMAL;
-
-    // ws2812_timeout_Semaphore = xSemaphoreCreateBinary();
-
-    // ws2812_delay_timer = xTimerCreate("delay_Timer", (10), pdTRUE, (void *)0, ws_delay_timeout);
-
     xTaskCreatePinnedToCore(
         Task_rainbowCycle, "Task_rainbowCycle_Handle", 1024, NULL, 4, &Task_rainbowCycle_Handle, ESP32_RUNNING_CORE);
 
-
-
     for (;;)
     {
-        _ws2812_message *ws2812_message;
+        _ws2812_message *ws2812_message = NULL;
         if (xQueueReceive(ws2812_rcv_Queue, &(ws2812_message), (TickType_t)0))
         {
             ws2812_status = ws2812_message->ws2812_status;
@@ -312,9 +272,9 @@ void Task_ws2812(void *pvParameters)
             break;    
         
         default:
+            vTaskDelay(100);
             break;
         }
-
     }
 }
 

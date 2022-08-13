@@ -3,8 +3,10 @@
  * @version: 
  * @Author: congsir
  * @Date: 2022-06-04 13:57:40
- * @LastEditors: wenzheng 565402462@qq.com
- * @LastEditTime: 2022-08-06 15:30:38
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-13 09:00:52
+ * https://cloud.tencent.com/developer/article/1891221
+ * 键值对应表 http://t.zoukankan.com/noticeable-p-14893583.html
  */
 #include <main.h>
 #ifdef ENABLE_BLE_KEY_BOARD
@@ -82,6 +84,37 @@ int keyboard_player_volume_down(void)
     Serial.println("Sending Play/Pause media key...");
     #ifdef ENABLE_BLE_KEY_BOARD
     bleKeyboard.write(KEY_MEDIA_VOLUME_DOWN);
+    #endif
+    return 0;
+}
+
+
+int keyboard_pass_ctrl_c(void)
+{
+    if(!check_keyboard_connected())
+    return -1;
+    
+    Serial.println("Sending ctrl + c");
+    #ifdef ENABLE_BLE_KEY_BOARD
+    bleKeyboard.press(KEY_LEFT_CTRL);
+    bleKeyboard.press(67);
+    delay(50);
+    bleKeyboard.releaseAll();
+    #endif
+    return 0;
+}
+
+int keyboard_pass_ctrl_v(void)
+{
+    if(!check_keyboard_connected())
+    return -1;
+    
+    Serial.println("Sending ctrl + v");
+    #ifdef ENABLE_BLE_KEY_BOARD
+    bleKeyboard.press(KEY_LEFT_CTRL);
+    bleKeyboard.press(86);
+    delay(50);
+    bleKeyboard.releaseAll();
     #endif
     return 0;
 }

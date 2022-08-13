@@ -4,7 +4,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 05:30:09
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-07 23:55:42
+ * @LastEditTime: 2022-08-12 22:30:55
  */
 #include "motor.h"
 #include <main.h>
@@ -219,7 +219,7 @@ void Task_foc(void *pvParameters)
     {
         motor.loopFOC(); 
         //监听页面状态
-        struct _knob_message *lvgl_message;
+        _knob_message *lvgl_message = NULL;
         if (xQueueReceive(motor_rcv_Queue, &(lvgl_message), (TickType_t)0))
         {
             Serial.print("motor_rcv_Queue --->");

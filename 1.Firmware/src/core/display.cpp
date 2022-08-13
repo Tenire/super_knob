@@ -11,7 +11,7 @@
  * @Author: congsir
  * @Date: 2022-05-22 00:19:50
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-10 00:17:13
+ * @LastEditTime: 2022-08-12 22:39:09
  */
 
 TimerHandle_t poweron_tmr;
@@ -70,11 +70,21 @@ void page_status_check(void)
     //     break;
     // case WELCOME_PAGE:
     //     break;
+    case IOT_CV_DEVELOPER_PAGE:
+        if(touch_pad_press(ESP32_TOUCH_PIN2)){
+            ext_cv_developer_page();
+            setup_scr_screen_iot_main(&super_knob_ui);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
+            set_super_knob_page_status(SUPER_PAGE_BUSY);
+            update_motor_config(1);
+            update_page_status(CHECKOUT_PAGE);
+        }
+        break;
     case IOT_LIGHT_BELT_PAGE:
         if(touch_pad_press(ESP32_TOUCH_PIN2)){
             ext_iot_light_belt_page();
             setup_scr_screen_iot_main(&super_knob_ui);
-            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
             update_page_status(CHECKOUT_PAGE);
@@ -84,7 +94,7 @@ void page_status_check(void)
         if(touch_pad_press(ESP32_TOUCH_PIN2)){
             ext_iot_volume_page();
             setup_scr_screen_iot_main(&super_knob_ui);
-            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
             update_page_status(CHECKOUT_PAGE);
@@ -93,7 +103,7 @@ void page_status_check(void)
     case IOT_POINTER_PAGE:
         if(touch_pad_press(ESP32_TOUCH_PIN2)){
             setup_scr_screen_iot_main(&super_knob_ui);
-            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, false);
+            lv_scr_load_anim(super_knob_ui.screen_iot_main_boday, LV_SCR_LOAD_ANIM_FADE_ON, 100, 10, true);
             set_super_knob_page_status(SUPER_PAGE_BUSY);
             update_motor_config(1);
             update_page_status(CHECKOUT_PAGE);
@@ -220,7 +230,7 @@ void Task_lvgl(void *pvParameters)
     for (;;)
     {
         //监听电机运行状态
-        struct _knob_message *motor_message;
+        _knob_message *motor_message = NULL;
         if (xQueueReceive(motor_msg_Queue, &(motor_message), (TickType_t)1))
         {
             Serial.print("lvgl_msg_Queue --->");
@@ -239,7 +249,7 @@ void Task_lvgl(void *pvParameters)
                     if(super_knob_ui.power_on_bar)
                     lv_bar_set_value(super_knob_ui.power_on_bar, 100, LV_ANIM_ON);
                     
-                    lv_timer_t *_check_timer = lv_timer_create(check_timerout, 800, NULL);
+                    lv_timer_t *_check_timer = lv_timer_create(check_timerout, 1000, NULL);
                     lv_timer_set_repeat_count(_check_timer, 1);
                 }    
                 break;
